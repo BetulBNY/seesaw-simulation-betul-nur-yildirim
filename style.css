@@ -4,9 +4,14 @@ body {
     justify-content: center;
     align-items: center; 
     height: 100vh; 
-    background-color: #f0f0f0; }
+    background-color: #f0f0f0;
+  }
+
 
 svg { 
+    width: 800px;
+    height: 600px;
+    flex-shrink: 0;
     background: linear-gradient(
         to bottom,
         #fde2e4 0%,   
