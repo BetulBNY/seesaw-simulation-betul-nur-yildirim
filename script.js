@@ -223,10 +223,18 @@ function fallingAnimation(circle, shine, label, targetY){
         else{
             circle.setAttribute("cy",currentY)
             shine.setAttribute("cy",currentY - (radius * 0.4))
-            label.setAttribute("y",currentY)
+            label.setAttribute("y",currentY + 5)
             seesawGroup.appendChild(fallingGroup);  // yamultuyor
-            placedBalls.push({weight: weight, distance: distance })
-            // 2. Fizik ve pozisyonu güncelle
+            // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
+            circle.setAttribute("cx", 400 + distance);
+            circle.setAttribute("cy", 450 - radius);
+            
+            shine.setAttribute("cx", (400 + distance) - (radius * 0.4));
+            shine.setAttribute("cy", (450 - radius) - (radius * 0.4));
+            
+            label.setAttribute("x", 400 + distance);
+            label.setAttribute("y", 450 - radius + 5);
+            placedBalls.push({weight: weight, distance: distance ,color: randomColor})
             updatePlankPosition();
         }
     }
