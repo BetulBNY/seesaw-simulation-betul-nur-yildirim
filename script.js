@@ -81,6 +81,22 @@ function calculatePhysics(){
     return currentAngle; // Turn seesaw
 }
 
+function rotatePlank(currentAngle){
+    seesawGroup.style.transform = `rotate(${currentAngle}deg)`;
+}
+
+function updatePlankPosition(){
+    const currentAngle = calculatePhysics();
+    rotatePlank(currentAngle);
+}
+
+// A function that finds the instantaneous height Y of at point X
+function getPlankY(distance) {
+    const angleRad = currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
+    // Y = PivotY + (mesafe * sin(açı))
+    return 450 + (distance * Math.sin(angleRad));       
+}
+
 svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;  
@@ -133,6 +149,7 @@ plank.addEventListener('click', function(event) {
 
     // Adding all of them to the svg group not seesaw group.
     svg.appendChild(fallingGroup); }
+
 
 
 
