@@ -1,10 +1,8 @@
 body {
   margin: 0; 
-  display: flex; 
-  justify-content: center;
-  align-items: center; 
   height: 100vh; 
   background-color: #f0f0f0;
+  font-family: 'Arial', sans-serif;
 }
 svg { 
   /* width: 800px;
@@ -20,18 +18,57 @@ svg {
 } 
 
 .page-wrapper{
+  width: 90%;
   display: flex;
   flex-direction: row;
+  margin: 100px auto;
 }
 
 .main-container{
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 25px;
 }
 
 .panels{
   display: flex;
   flex-direction: row;
-  gap: 100px;
+  justify-content: space-between;
+  gap: 10px;
+  
+}
+.panel{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  height: 110px;
+  background: linear-gradient(145deg, #fff5f5 0%, #ffe8ed 50%, #ffd9e0 100%);
+  padding:5px;
+  border-radius: 10px;
+  border:2px solid rgb(232, 217, 236);
+  box-shadow: 0 8px 20px rgb(249, 246, 246);
+  font-size: 12px;
+}
+
+.panel h3 {
+  margin: 12px 0 12px 0;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c97b8a;
+  text-align: center;
+}
+
+.area-attributes b {
+  font-size: 13px;
+  font-weight: 600;
+  color: #b57788;
+}
+
+.area-attributes span {
+  font-size: 28px;
+  font-weight: 800;
+  color: #d97a91;
 }
