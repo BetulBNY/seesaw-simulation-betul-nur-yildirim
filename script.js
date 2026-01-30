@@ -100,14 +100,18 @@ function getPlankY(distance) {
     return 450 + (distance * Math.sin(angleRad));       
 }
 
+// Sound Method
+function playLandingSound(weight) {
+    const audioContext = new AudioContext();
+    const osc = audioContext.createOscillator(); // soruce of sound
 
+    osc.type = "triangle"; // type of sound
+    osc.frequency.value = 220 - weight * 7; // ağırlık arttıkça tizlik azalyor
 
-
-
-
-
-
-//// CREATE SOUND METHOD"""""""""""""""""""""""""""
+    osc.connect(audioContext.destination);
+    osc.start();
+    osc.stop(audioContext.currentTime + 0.05);
+}
 
 // GHOST CIRCLE PART
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
@@ -235,6 +239,7 @@ function fallingAnimation(circle, shine, label, targetY){
             label.setAttribute("x", 400 + distance);
             label.setAttribute("y", 450 - radius + 5);
             placedBalls.push({weight: weight, distance: distance ,color: randomColor})
+            playLandingSound(weight)
             updatePlankPosition();
         }
     }
