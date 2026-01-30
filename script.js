@@ -9,6 +9,7 @@ const MAX_ANGLE = 30;
 
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
+
 // Random color generator
 function getRandomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
@@ -27,7 +28,9 @@ function createCircle(centerX,centerY,r,color,strokeColor,strokeWidth) {
     circle.setAttribute("fill", color);
     circle.setAttribute("stroke", strokeColor); 
     circle.setAttribute("stroke-width", strokeWidth);
+
     circle.style.pointerEvents = "none";
+
     return circle;
 }
 
@@ -47,6 +50,7 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
     return text;
 }
 
+
 let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
 let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
 const measures = {
@@ -59,7 +63,6 @@ const measures = {
         left: 0
     }
 }
-
 function calculatePhysics(){
     // Calculating Torque
     const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
@@ -96,6 +99,7 @@ function getPlankY(distance) {
     // Y = PivotY + (mesafe * sin(açı))
     return 450 + (distance * Math.sin(angleRad));       
 }
+
 // Sound Method
 function playLandingSound(weight) {
     const audioContext = new AudioContext();
@@ -108,6 +112,7 @@ function playLandingSound(weight) {
     osc.start();
     osc.stop(audioContext.currentTime + 0.05);
 }
+
 // GHOST CIRCLE PART
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -125,6 +130,7 @@ function updateGhost(x, weight) {
     ghostGroup.appendChild(text);
     ghostGroup.style.display = "block";
 }
+
 svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;  
@@ -137,7 +143,6 @@ svg.addEventListener('mousemove', function(event) { // instead of mousemove on p
         ghostGroup.style.display = "none";
     }
 });
-
 
 // Click on plank
 plank.addEventListener('click', function(event) {
@@ -225,12 +230,4 @@ function fallingAnimation(circle, shine, label, targetY){
 
    console.log("Down:", weight, "Next:", nextWeight);
 });
-
-
-
-
-
-
-
-
 
