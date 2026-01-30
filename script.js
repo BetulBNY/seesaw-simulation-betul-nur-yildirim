@@ -166,6 +166,7 @@ function fallingAnimation(circle, shine, label, targetY){
             circle.setAttribute("cy",currentY)
             shine.setAttribute("cy",currentY - (radius * 0.4))
             label.setAttribute("y",currentY)
+            seesawGroup.appendChild(fallingGroup);  // yamultuyor
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
@@ -174,7 +175,7 @@ function fallingAnimation(circle, shine, label, targetY){
 
 fallingAnimation(circle, shine, label, targetY)
 
-//seesawGroup.appendChild(fallingGroup);  // yamultuyor
+
 
 
    // After the ball is created determine the next weight and update the ghost.
