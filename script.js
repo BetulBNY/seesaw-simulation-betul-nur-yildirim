@@ -2,6 +2,11 @@ const plank = document.getElementById('plank');
 const seesawGroup = document.getElementById('seesaw-group');
 const svg = document.getElementById('sim-svg');
 
+const PLANKSTART = 200;
+const PLANKEND= 600;
+const GHOST_CY = 250;
+const MAX_ANGLE = 30;
+
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
 // Random color generator
@@ -42,6 +47,18 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
     return text;
 }
 
+svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
+    const rect = svg.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;  
+
+    // If we are only in between 200-600(PLANKSTART-PLANKEND)
+    if (mouseX >= PLANKSTART && mouseX <= PLANKEND) {
+    // Update the ghost ball (X coordinate is the same as the mouse cursor, weight is the next weight)
+        updateGhost(mouseX, nextWeight);
+    } else {
+        ghostGroup.style.display = "none";
+    }
+});
 
 // Click on plank
 plank.addEventListener('click', function(event) {
@@ -82,6 +99,7 @@ plank.addEventListener('click', function(event) {
 
     // Adding all of them to the svg group not seesaw group.
     svg.appendChild(fallingGroup); }
+
 
 
 
