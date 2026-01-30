@@ -127,6 +127,7 @@ svg.addEventListener('mousemove', function(event) { // instead of mousemove on p
     }
 });
 
+
 // Click on plank
 plank.addEventListener('click', function(event) {
 
@@ -165,7 +166,55 @@ plank.addEventListener('click', function(event) {
     fallingGroup.appendChild(label);
 
     // Adding all of them to the svg group not seesaw group.
-    svg.appendChild(fallingGroup); }
+    svg.appendChild(fallingGroup);
+
+const targetY = getPlankY(distance)-radius;
+
+function fallingAnimation(circle, shine, label, targetY){
+    let velocity = 0;
+    let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
+    const gravity = 0.5;
+    const fallingSteps = () => {
+        velocity += gravity;
+        currentY += velocity;
+        circle.setAttribute("cy",currentY)
+        shine.setAttribute("cy",currentY - (radius * 0.4))
+        label.setAttribute("y",currentY)
+
+        if (currentY < targetY){
+            requestAnimationFrame(fallingSteps); // contnue fallingSteps
+        }
+        else{
+            circle.setAttribute("cy",currentY)
+            shine.setAttribute("cy",currentY - (radius * 0.4))
+            label.setAttribute("y",currentY + 5)
+            seesawGroup.appendChild(fallingGroup);  // yamultuyor
+            // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
+            circle.setAttribute("cx", 400 + distance);
+            circle.setAttribute("cy", 450 - radius);
+            
+            shine.setAttribute("cx", (400 + distance) - (radius * 0.4));
+            shine.setAttribute("cy", (450 - radius) - (radius * 0.4));
+            
+            label.setAttribute("x", 400 + distance);
+            label.setAttribute("y", 450 - radius + 5);
+            placedBalls.push({weight: weight, distance: distance ,color: randomColor})
+            playLandingSound(weight)
+            updatePlankPosition();
+        }
+    }
+    requestAnimationFrame(fallingSteps); // starts fallingSteps
+}
+
+    fallingAnimation(circle, shine, label, targetY)
+
+   // After the ball is created determine the next weight and update the ghost.
+   nextWeight = getRandomWeight();
+   updateGhost(mouseX, nextWeight);
+
+   console.log("Down:", weight, "Next:", nextWeight);
+});
+
 
 
 
