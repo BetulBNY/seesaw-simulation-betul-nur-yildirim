@@ -72,3 +72,43 @@ svg {
   font-weight: 800;
   color: #d97a91;
 }
+
+#buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+#buttons button {
+  padding: 12px 28px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.reset {
+  background: linear-gradient(135deg, #ffd9e0 0%, #ffb3c1 100%);
+  color: #8b4a5a;
+}
+
+.reset:hover {
+  box-shadow: 0 6px 16px rgba(194, 133, 144, 0.4);
+  background: #dabbc3;
+
+}
+
+.pause {
+  background: linear-gradient(135deg, #ffe8cc 0%, #ffd9b3 100%);
+  color: #8b6a3a;
+}
+
+.pause:hover {
+  box-shadow: 0 6px 16px rgba(255, 217, 179, 0.4);
+  background: #b2a896;
+
+}
+
