@@ -96,7 +96,18 @@ function getPlankY(distance) {
     // Y = PivotY + (mesafe * sin(açı))
     return 450 + (distance * Math.sin(angleRad));       
 }
+// Sound Method
+function playLandingSound(weight) {
+    const audioContext = new AudioContext();
+    const osc = audioContext.createOscillator(); // soruce of sound
 
+    osc.type = "triangle"; // type of sound
+    osc.frequency.value = 220 - weight * 7; // ağırlık arttıkça tizlik azalyor
+
+    osc.connect(audioContext.destination);
+    osc.start();
+    osc.stop(audioContext.currentTime + 0.05);
+}
 // GHOST CIRCLE PART
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -214,6 +225,7 @@ function fallingAnimation(circle, shine, label, targetY){
 
    console.log("Down:", weight, "Next:", nextWeight);
 });
+
 
 
 
