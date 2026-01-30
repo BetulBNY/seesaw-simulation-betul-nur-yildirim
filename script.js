@@ -65,7 +65,7 @@ const measures = {
 }
 function calculatePhysics(){
     // Calculating Torque
-    const lastBall = placedObjects[placedObjects.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
+    const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
     if (lastBall.distance < 0) {
         // Left S,de
         measures.weights.left += lastBall.weight;
@@ -211,7 +211,9 @@ function fallingAnimation(circle, shine, label, targetY){
             shine.setAttribute("cy",currentY - (radius * 0.4))
             label.setAttribute("y",currentY)
             seesawGroup.appendChild(fallingGroup);  // yamultuyor
-
+            placedBalls.push({weight: weight, distance: distance })
+            // 2. Fizik ve pozisyonu güncelle
+            updatePlankPosition();
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
