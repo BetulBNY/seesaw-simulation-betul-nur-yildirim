@@ -93,6 +93,20 @@ function updatePlankPosition(){
     rotatePlank(currentAngle);
 }
 
+// A function that finds the instantaneous height Y of at point X
+function getPlankY(distance) {
+    const angleRad = currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
+    // Y = PivotY + (mesafe * sin(açı))
+    return 450 + (distance * Math.sin(angleRad));       
+}
+
+
+
+
+
+
+
+
 //// CREATE SOUND METHOD"""""""""""""""""""""""""""
 
 // GHOST CIRCLE PART
@@ -190,7 +204,7 @@ plank.addEventListener('click', function(event) {
 // centerY değer değerleri her fallingGroup üyesi için değişecek. 
 
 
-const targetY = 450;
+const targetY = getPlankY(distance)-radius;
 
 function fallingAnimation(circle, shine, label, targetY){
     let velocity = 0;
@@ -200,7 +214,7 @@ function fallingAnimation(circle, shine, label, targetY){
         velocity += gravity;
         currentY += velocity;
         circle.setAttribute("cy",currentY)
-        shine.setAttribute("cy",currentY)
+        shine.setAttribute("cy",currentY - (radius * 0.4))
         label.setAttribute("y",currentY)
 
         if (currentY < targetY){
