@@ -97,6 +97,23 @@ function getPlankY(distance) {
     return 450 + (distance * Math.sin(angleRad));       
 }
 
+// GHOST CIRCLE PART
+let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
+const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+//ghostGroup.style.pointerEvents = "none";
+svg.appendChild(ghostGroup);
+
+function updateGhost(x, weight) {
+    ghostGroup.innerHTML = ''; 
+    const r = 10 + (weight * 2);
+
+    const circle = createCircle(x,GHOST_CY,r,"gray")
+    const text = createText(x,GHOST_CY,"black",12,weight  )
+
+    ghostGroup.appendChild(circle);
+    ghostGroup.appendChild(text);
+    ghostGroup.style.display = "block";
+}
 svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;  
@@ -149,6 +166,7 @@ plank.addEventListener('click', function(event) {
 
     // Adding all of them to the svg group not seesaw group.
     svg.appendChild(fallingGroup); }
+
 
 
 
