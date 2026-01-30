@@ -43,23 +43,45 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
 }
 
 
+// Click on plank
 plank.addEventListener('click', function(event) {
 
 // LOCATION PART
     // Screen position of SVG
     const rect = svg.getBoundingClientRect();
-    console.log("SVG's screen location:", rect);
-
     // Calculating x coordinate of the clicked point inside SVG
     // (Real mouse coordiantes - Left side of the SVG (distance between frame and left of screen))
     const mouseX = event.clientX - rect.left;
-    console.log("SVG left:", rect.left);
-    console.log("Mouse click coordinates:", event.clientX);
-
     // Distance from the pivot(center)
     const distance = mouseX - 400;
 
-    console.log("X inside SVG:", mouseX.toFixed(0));
-    console.log("Distance from center:", distance.toFixed(0));}
+// CIRCLE CREATION PART
+    const weight = nextWeight; // getRandomWeight()
+    const radius = 10 + (weight * 2); 
+    const circleCy = 440 - radius
+    const randomColor = getRandomColor(); 
+    const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    // Creating circle
+    const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
+
+    // Creating shine                        //////////////??????????????????????????????
+    let shineRadius= radius * 0.2;
+    let shineCy=  (440 - radius - 1) - (radius * 0.4);
+    let shineCx= mouseX - (radius * 0.4)
+    const shine = createCircle( shineCx, shineCy,shineRadius,"rgba(255, 255, 255, 0.6)")
+
+    // Creataing Weight Txt
+    let labelCy = 440 - radius +5
+    let labelFontSize = 10 + weight
+    const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
+
+    // Added to "g" seesawGroup for moving together.
+    fallingGroup.appendChild(circle);
+    fallingGroup.appendChild(shine);
+    fallingGroup.appendChild(label);
+
+    // Adding all of them to the svg group not seesaw group.
+    svg.appendChild(fallingGroup); }
+
 
 
