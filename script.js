@@ -2,6 +2,10 @@ const plank = document.getElementById('plank');
 const seesawGroup = document.getElementById('seesaw-group');
 const svg = document.getElementById('sim-svg');
 
+const PLANKSTART = 200;
+const PLANKEND= 600;
+const GHOST_CY = 250;
+
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
 
@@ -14,7 +18,38 @@ function getRandomWeight() {
     return Math.floor(Math.random() * 10) + 1;
 }
 
+// Create Circle Method
+function createCircle(centerX,centerY,r,color,strokeColor,strokeWidth) {
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", centerX);
+    circle.setAttribute("cy", centerY); 
+    circle.setAttribute("r", r);
+    circle.setAttribute("fill", color);
+    circle.setAttribute("stroke", strokeColor); 
+    circle.setAttribute("stroke-width", strokeWidth);
 
+    circle.style.pointerEvents = "none";
+
+    return circle;
+}
+
+function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor = "middle",fontFamily="Arial",fontWeight="bold") {
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", xLocation);
+    text.setAttribute("y", yLocation + 5);
+    text.setAttribute("fill", textColor);
+    text.setAttribute("font-size", fontSize +"px");
+    text.textContent = weight + "kg";
+
+    text.setAttribute("text-anchor", textAnchor); // Center horizontally
+    text.setAttribute("font-family", fontFamily);
+    text.setAttribute("font-weight", fontWeight);
+    text.style.pointerEvents = "none";
+
+    return text;
+}
+
+//// CREATE SOUND METHOD"""""""""""""""""""""""""""
 
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -25,38 +60,27 @@ svg.appendChild(ghostGroup);
 function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
     const r = 10 + (weight * 2);
-    
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", x);
-    circle.setAttribute("cy", 250); // A fixed height at the top of the screen.
-    circle.setAttribute("r", r);
-    circle.setAttribute("fill", "gray"); 
-    
-    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("x", x);
-    text.setAttribute("y", 255);
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("fill", "black");
-    text.setAttribute("font-size", "12px");
-    text.textContent = weight + "kg";
+
+    const circle = createCircle(x,GHOST_CY,r,"gray")
+    const text = createText(x,GHOST_CY,"black",12,weight  )
 
     ghostGroup.appendChild(circle);
     ghostGroup.appendChild(text);
     ghostGroup.style.display = "block";
 }
 
-plank.addEventListener('mousemove', function(event) {
+svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;  
+
+    // If we are only in between 200-600(PLANKSTART-PLANKEND)
+    if (mouseX >= PLANKSTART && mouseX <= PLANKEND) {
     // Update the ghost ball (X coordinate is the same as the mouse cursor, weight is the next weight)
-    updateGhost(mouseX, nextWeight);
+        updateGhost(mouseX, nextWeight);
+    } else {
+        ghostGroup.style.display = "none";
+    }
 });
-
-//Hide the ghost ball when the mouse comes out of the plank.
-plank.addEventListener('mouseleave', function() {
-    ghostGroup.style.display = "none";
-});
-
 
 // Click on plank
 plank.addEventListener('click', function(event) {
@@ -88,56 +112,33 @@ plank.addEventListener('click', function(event) {
     const weight = nextWeight; // getRandomWeight()
     const radius = 10 + (weight * 2); 
     const randomColor = getRandomColor(); 
-
-    // Group for weight text, circle and shine effect
-    const weightCircleGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-
+    const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
     // Creating circle
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const circle = createCircle(mouseX,440 - radius,radius,randomColor,"rgba(0,0,0,0.2)",1)
 
-    circle.setAttribute("cx", mouseX);          
-    circle.setAttribute("cy", 440 - radius);     // Right above the plank
-    circle.setAttribute("r", radius);           
-    circle.setAttribute("fill", randomColor); 
-    circle.setAttribute("stroke", "rgba(0,0,0,0.2)"); 
-    circle.setAttribute("stroke-width", "1");
+    // Creating shine                        //////////////??????????????????????????????
+    let shineRadius= radius * 0.2;
+    let shineCy=  (440 - radius - 1) - (radius * 0.4);
+    let shineCx= mouseX - (radius * 0.4)
+    const shine = createCircle( shineCx, shineCy,shineRadius,"rgba(255, 255, 255, 0.6)")
 
-    // Shine effect
-    const shine = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    // Shining circle added to upper left
-    shine.setAttribute("cx", mouseX - (radius * 0.4)); 
-    shine.setAttribute("cy", (440 - radius - 1) - (radius * 0.4));
-    shine.setAttribute("r", radius * 0.2); 
-    shine.setAttribute("fill", "rgba(255, 255, 255, 0.6)"); 
-
-    // Weight Txt
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("x", mouseX);
-    label.setAttribute("y", 440 - radius +5); 
-    label.setAttribute("text-anchor", "middle"); // Center horizontally
-    label.setAttribute("fill", "white");
-    label.setAttribute("font-size", "12px");
-    label.setAttribute("font-family", "Arial");
-    label.setAttribute("font-weight", "bold");
-    label.setAttribute("font-size", (10 + weight) + "px"); 
-    label.textContent = weight + "kg";
+    // Creataing Weight Txt
+    let labelCy = 440 - radius +5
+    let labelFontSize = 10 + weight
+    const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
 
     // Added to "g" seesawGroup for moving together.
-    weightCircleGroup.appendChild(circle);
-    weightCircleGroup.appendChild(shine);
-    weightCircleGroup.appendChild(label);
+    fallingGroup.appendChild(circle);
+    fallingGroup.appendChild(shine);
+    fallingGroup.appendChild(label);
 
-    // Adding all of them to the main seesaw group.
-    seesawGroup.appendChild(weightCircleGroup);
-
-    //console.log(`${weight} kg ağırlığında bir top eklendi. Uzaklık: ${distance.toFixed(0)}`);
+    // Adding all of them to the svg group not seesaw group.
+    svg.appendChild(fallingGroup);
 
    // After the ball is created determine the next weight and update the ghost.
    nextWeight = getRandomWeight();
    updateGhost(mouseX, nextWeight);
 
    console.log("Down:", weight, "Next:", nextWeight);
-    
 });
-
 
