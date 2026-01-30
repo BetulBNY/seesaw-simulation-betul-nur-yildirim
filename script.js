@@ -47,6 +47,40 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
     return text;
 }
 
+let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
+let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
+const measures = {
+    torques: {
+        right: 0,
+        left: 0
+    },
+    weights: {
+        right: 0,
+        left: 0
+    }
+}
+
+function calculatePhysics(){
+    // Calculating Torque
+    const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
+    if (lastBall.distance < 0) {
+        // Left S,de
+        measures.weights.left += lastBall.weight;
+        measures.torques.left += lastBall.weight * Math.abs(lastBall.distance);
+    } else {
+        // Right Side
+        measures.weights.right += lastBall.weight;
+        measures.torques.right += lastBall.weight * Math.abs(lastBall.distance);
+    }
+    console.log("left torque:",measures.torques.left,"right torque:",measures.torques.right);
+    // Calculating Angle
+    // We lock it between -30 and +30 degrees with Math.max/min.
+    let torqueDiff = (measures.torques.right - measures.torques.left) / 20;           
+    currentAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
+
+    return currentAngle; // Turn seesaw
+}
+
 svg.addEventListener('mousemove', function(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;  
@@ -99,6 +133,7 @@ plank.addEventListener('click', function(event) {
 
     // Adding all of them to the svg group not seesaw group.
     svg.appendChild(fallingGroup); }
+
 
 
 
