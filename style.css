@@ -1,0 +1,23 @@
+body {
+    margin: 0; 
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+    background-color: #f0f0f0;
+  }
+
+svg { 
+   /* width: 800px;
+    height: 600px;*/
+    flex-shrink: 0;
+    background: linear-gradient(
+        to bottom,
+        #fde2e4 0%,   
+        #fadadd 35%,  
+        #fce1c9 65%,  
+        #fff1c1 100%); 
+    border: 2px solid #333; } 
+
+
+
