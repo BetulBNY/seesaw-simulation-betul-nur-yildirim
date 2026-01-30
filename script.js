@@ -51,12 +51,12 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
 
 //// CREATE SOUND METHOD"""""""""""""""""""""""""""
 
+// GHOST CIRCLE PART
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 //ghostGroup.style.pointerEvents = "none";
 svg.appendChild(ghostGroup);
 
-// GHOST CIRCLE PART
 function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
     const r = 10 + (weight * 2);
@@ -111,10 +111,11 @@ plank.addEventListener('click', function(event) {
 // CIRCLE CREATION PART
     const weight = nextWeight; // getRandomWeight()
     const radius = 10 + (weight * 2); 
+    const circleCy = 440 - radius
     const randomColor = getRandomColor(); 
     const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
     // Creating circle
-    const circle = createCircle(mouseX,440 - radius,radius,randomColor,"rgba(0,0,0,0.2)",1)
+    const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
 
     // Creating shine                        //////////////??????????????????????????????
     let shineRadius= radius * 0.2;
@@ -134,6 +135,47 @@ plank.addEventListener('click', function(event) {
 
     // Adding all of them to the svg group not seesaw group.
     svg.appendChild(fallingGroup);
+
+
+// FALL ANIMATION PART
+// steps:
+// gravity ile hız eklenip düşecek
+// düşülecek yer-hedef y bölgesi, x tamam zaten
+// hedef y şimdilik 450 olsun sonra ayrı metod eklencek
+// svg de transform diye hazır metod yok bu yüzden fallingGroup için transform çağrılmayacak ancak 
+// centerY değer değerleri her fallingGroup üyesi için değişecek. 
+
+
+const targetY = 450;
+
+function fallingAnimation(circle, shine, label, targetY){
+    let velocity = 0;
+    let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
+    const gravity = 0.5;
+    const fallingSteps = () => {
+        velocity += gravity;
+        currentY += velocity;
+        circle.setAttribute("cy",currentY)
+        shine.setAttribute("cy",currentY)
+        label.setAttribute("y",currentY)
+
+        if (currentY < targetY){
+            requestAnimationFrame(fallingSteps); // contnue fallingSteps
+        }
+        else{
+            circle.setAttribute("cy",currentY)
+            shine.setAttribute("cy",currentY - (radius * 0.4))
+            label.setAttribute("y",currentY)
+        }
+    }
+    requestAnimationFrame(fallingSteps); // starts fallingSteps
+}
+
+
+fallingAnimation(circle, shine, label, targetY)
+
+//seesawGroup.appendChild(fallingGroup);  // yamultuyor
+
 
    // After the ball is created determine the next weight and update the ghost.
    nextWeight = getRandomWeight();
