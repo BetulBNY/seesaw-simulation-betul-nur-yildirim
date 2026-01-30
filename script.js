@@ -5,6 +5,7 @@ const svg = document.getElementById('sim-svg');
 const PLANKSTART = 200;
 const PLANKEND= 600;
 const GHOST_CY = 250;
+const MAX_ANGLE = 30;
 
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
@@ -47,6 +48,49 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
     text.style.pointerEvents = "none";
 
     return text;
+}
+
+
+let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
+let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
+const measures = {
+    torques: {
+        right: 0,
+        left: 0
+    },
+    weights: {
+        right: 0,
+        left: 0
+    }
+}
+function calculatePhysics(){
+    // Calculating Torque
+    const lastBall = placedObjects[placedObjects.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
+    if (lastBall.distance < 0) {
+        // Left S,de
+        measures.weights.left += lastBall.weight;
+        measures.torques.left += lastBall.weight * Math.abs(lastBall.distance);
+    } else {
+        // Right Side
+        measures.weights.right += lastBall.weight;
+        measures.torques.right += lastBall.weight * Math.abs(lastBall.distance);
+    }
+    console.log("left torque:",measures.torques.left,"right torque:",measures.torques.right);
+    // Calculating Angle
+    // We lock it between -30 and +30 degrees with Math.max/min.
+    let torqueDiff = (measures.torques.right - measures.torques.left) / 20;           
+    currentAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
+
+    return currentAngle; // Turn seesaw
+}
+
+function rotatePlank(currentAngle){
+    seesawGroup.style.transform = `rotate(${currentAngle}deg)`;
+}
+
+function updatePlankPosition(){
+    const currentAngle = calculatePhysics();
+    rotatePlank(currentAngle);
 }
 
 //// CREATE SOUND METHOD"""""""""""""""""""""""""""
@@ -167,13 +211,14 @@ function fallingAnimation(circle, shine, label, targetY){
             shine.setAttribute("cy",currentY - (radius * 0.4))
             label.setAttribute("y",currentY)
             seesawGroup.appendChild(fallingGroup);  // yamultuyor
+
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
 }
 
 
-fallingAnimation(circle, shine, label, targetY)
+    fallingAnimation(circle, shine, label, targetY)
 
 
 
