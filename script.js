@@ -4,7 +4,14 @@ const svg = document.getElementById('sim-svg');
 
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
-
+// Random color generator
+function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+// Random wieght generator
+function getRandomWeight() {
+    return Math.floor(Math.random() * 10) + 1;
+}
 
 // Create Circle Method
 function createCircle(centerX,centerY,r,color,strokeColor,strokeWidth) {
@@ -34,3 +41,4 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
 
     return text;
 }
+
