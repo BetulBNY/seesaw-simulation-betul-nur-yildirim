@@ -7,6 +7,9 @@ const PLANKEND= 600;
 const GHOST_CY = 250;
 const MAX_ANGLE = 30;
 
+window.addEventListener("beforeunload", saveStateToLocalStorage);
+window.addEventListener("load", loadStateFromLocalStorage);
+
 // List of colors
 const colors = ["#ff5733", "#33ff57", "#3357ff", "#f39c12", "#8e44ad", "#1abc9c", "#e84393", "#f1c40f"];
 
@@ -86,7 +89,7 @@ const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(ghostGroup);
 
 
-const measures = {
+let measures = {
     torques: {
         right: 0,
         left: 0
@@ -133,7 +136,7 @@ function updatePlankPosition(){
 function getPlankY(distance) {
     const angleRad = measures.currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
     // Y = PivotY + (mesafe * sin(açı))
-    return 450 + (distance * Math.sin(angleRad));       
+    return 450 + (distance * Math.tan(angleRad));             //////////////////////////????????????????????????????? Tan      
 }
 
 // Sound Method
@@ -190,13 +193,12 @@ plank.addEventListener('click', function(event) {
     // CIRCLE CREATION PART
     const weight = measures.nextWeight;
     const radius = 10 + (weight * 2); 
-    const circleCy = 440 - radius;
     const randomColor = getRandomColor(); 
-    //const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    //C
     
     // Creating circle
 
-    const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, circleCy, radius, randomColor, weight)
+    const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, GHOST_CY, radius, randomColor, weight)
 
     /*
     // const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
@@ -230,27 +232,25 @@ const targetY = getPlankY(distance)-radius;
         
         circle.setAttribute("cy",currentY)
         shine.setAttribute("cy",currentY - (radius * 0.4))
-        label.setAttribute("y",currentY)
+        label.setAttribute("y",currentY + 5)
 
         velocity += gravity;
 
-        if (currentY + velocity < targetY){
+        if (currentY + velocity < targetY) {
             requestAnimationFrame(fallingSteps); // contnue fallingSteps
         }
-        else{
-            circle.setAttribute("cy",currentY)
-            shine.setAttribute("cy",currentY - (radius * 0.4))
-            label.setAttribute("y",currentY + 5)
-            seesawGroup.appendChild(fallingGroup);  // yamultuyor
+        else {
             // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
 
 
             // Calculate the angular deviation caused by rotation of the seesaw group element.
             const angleRadian = measures.currentAngle * (Math.PI / 180);
             const adjustedDistance = distance / Math.cos(angleRadian);
-
             const localCX = 400 + adjustedDistance;
             const localCY = 450 - radius; // Kalasın üst yüzeyi
+            
+           // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
+            placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})
 
             circle.setAttribute("cx", localCX);
             circle.setAttribute("cy", localCY);
@@ -261,11 +261,13 @@ const targetY = getPlankY(distance)-radius;
             label.setAttribute("x", localCX);
             label.setAttribute("y", localCY + 5);
 
-            placedBalls.push({weight: weight, distance: distance ,color: randomColor})
-            playLandingSound(weight)
-            updatePlankPosition();
-            updatePanelsDOM();
 
+            seesawGroup.appendChild(fallingGroup);  // yamultuyor
+            
+            updatePlankPosition();
+         
+            playLandingSound(weight)
+            updatePanelsDOM();
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
@@ -280,13 +282,41 @@ const targetY = getPlankY(distance)-radius;
 
 });
 
+///////////////// DOM SECTION
 function updatePanelsDOM() {
     document.getElementById("angle-value").textContent = measures.currentAngle.toFixed(1); 
     document.getElementById("left-weight-value").textContent = measures.weights.left; 
     document.getElementById("right-weight-value").textContent = measures.weights.right; 
     document.getElementById("left-torque-value").textContent = measures.torques.left.toFixed(1); 
     document.getElementById("right-torque-value").textContent = measures.torques.right.toFixed(1); 
-
-
 }
+
+/// LOCAL STORAGE
+
+
+
+function saveStateToLocalStorage() {
+    const state = {
+        placedBalls: placedBalls,
+        measures: measures,
+    };
+    localStorage.setItem("savedState", JSON.stringify(state));
+}
+
+
+function loadStateFromLocalStorage() {
+    const savedState = localStorage.getItem("savedState");
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        
+        placedBalls = state.placedBalls
+        measures = state.measures
+        
+        // Updat UI
+        updatePanelsDOM()
+    }           
+}            
+
+
+
 
