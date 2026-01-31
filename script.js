@@ -22,6 +22,11 @@ function getRandomWeight() {
     return Math.floor(Math.random() * 10) + 1;
 }
 
+
+
+
+
+
 // Create Circle Method
 function createCircle(centerX,centerY,radius,color,strokeColor,strokeWidth) {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -82,13 +87,29 @@ function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColo
     return { wholeCircle, shine, label, fallingGroup} ;
 }
 
-//let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
-let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
-//let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
+
+function setBallY(cy, radius, wholeCircle, shine, label) {
+    wholeCircle.setAttribute("cy", cy)
+    shine.setAttribute("cy", cy - (radius * 0.4))
+    label.setAttribute("y", cy + 5)
+}
+
+function setBallX(cx, radius, wholeCircle, shine, label) {
+    wholeCircle.setAttribute("cx", cx);
+    shine.setAttribute("cx", cx - (radius * 0.4));
+    label.setAttribute("x", cx);
+}
+
+
+
+
+
+
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(ghostGroup);
 
 
+let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
 let measures = {
     torques: {
         right: 0,
@@ -178,16 +199,6 @@ svg.addEventListener('mousemove', function(event) { // instead of mousemove on p
     }
 });
 
-
-
-
-
-
-
-
-
-
-
 function plankClickHandler(event) {
 
     // LOCATION PART
@@ -218,9 +229,7 @@ function plankClickHandler(event) {
         const fallingSteps = () => {
             currentY += velocity;
             
-            circle.setAttribute("cy",currentY)
-            shine.setAttribute("cy",currentY - (radius * 0.4))
-            label.setAttribute("y",currentY + 5)
+            setBallY(currentY, radius, wholeCircle, shine, label)
     
             velocity += gravity;
     
@@ -239,15 +248,10 @@ function plankClickHandler(event) {
                 
                // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
                 placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})
-    
-                circle.setAttribute("cx", localCX);
-                circle.setAttribute("cy", localCY);
+
+                setBallY(localCY, radius, wholeCircle, shine, label);
                 
-                shine.setAttribute("cx", localCX - (radius * 0.4));
-                shine.setAttribute("cy", localCY - (radius * 0.4));
-                
-                label.setAttribute("x", localCX);
-                label.setAttribute("y", localCY + 5);
+                setBallX(localCX, radius, wholeCircle, shine, label);
     
     
                 seesawGroup.appendChild(fallingGroup);  // yamultuyor
@@ -314,13 +318,8 @@ function loadStateFromLocalStorage() {
 function uploadBalls() {
     placedBalls.map(ball => {
             const  {wholeCircle, shine, label, fallingGroup} = createCompleteCircle(ball.localCX,ball.localCY, ball.radius, ball.color, ball.weight) 
-            wholeCircle.setAttribute("cx", ball.localCX);
-            wholeCircle.setAttribute("cy", ball.localCY);
-            shine.setAttribute("cx", ball.localCX - (ball.radius * 0.4));
-            shine.setAttribute("cy", ball.localCY - (ball.radius * 0.4));
-            label.setAttribute("x", ball.localCX);
-            label.setAttribute("y", ball.localCY + 5);
-            
+            setBallY( ball.localCY, ball.radius, wholeCircle, shine, label);
+            setBallX( ball.localCX, ball.radius, wholeCircle, shine, label);
             seesawGroup.appendChild(fallingGroup);       
         }
     ) 
