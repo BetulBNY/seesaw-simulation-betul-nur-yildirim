@@ -313,10 +313,27 @@ function loadStateFromLocalStorage() {
         measures = state.measures
         
         // Updat UI
+        uploadBalls();
         updatePanelsDOM()
     }           
 }            
 
 
+function uploadBalls() {
+    placedBalls.map(ball => {
+            const  {wholeCircle, shine, label, fallingGroup} = createCompleteCircle(ball.localCX,ball.localCY, ball.radius, ball.color, ball.weight) 
+            wholeCircle.setAttribute("cx", ball.localCX);
+            wholeCircle.setAttribute("cy", ball.localCY);
+            shine.setAttribute("cx", ball.localCX - (ball.radius * 0.4));
+            shine.setAttribute("cy", ball.localCY - (ball.radius * 0.4));
+            label.setAttribute("x", ball.localCX);
+            label.setAttribute("y", ball.localCY + 5);
+            
+            seesawGroup.appendChild(fallingGroup);       
+        }
+    ) 
+
+    updatePlankPosition();
+}
 
 
