@@ -91,7 +91,12 @@ const measures = {
         left: 0
     }
 }
-function calculatePhysics(){
+
+function calcuateAngle(torqueDiff) {
+    return Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
+}
+
+function updateTorque(){
     // Calculating Torque
     const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
     if (lastBall.distance < 0) {
@@ -103,13 +108,8 @@ function calculatePhysics(){
         measures.weights.right += lastBall.weight;
         measures.torques.right += lastBall.weight * Math.abs(lastBall.distance);
     }
-    console.log("left torque:",measures.torques.left,"right torque:",measures.torques.right);
-    // Calculating Angle
-    // We lock it between -30 and +30 degrees with Math.max/min.
-    let torqueDiff = (measures.torques.right - measures.torques.left) / 20;           
-    currentAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
 
-    return currentAngle; // Turn seesaw
+    return (measures.torques.right - measures.torques.left) / 20;   
 }
 
 function rotatePlank(currentAngle){
@@ -117,7 +117,8 @@ function rotatePlank(currentAngle){
 }
 
 function updatePlankPosition(){
-    const currentAngle = calculatePhysics();
+    let torqueDiff = updateTorque();        
+    const currentAngle = calcuateAngle(torqueDiff);
     rotatePlank(currentAngle);
 }
 
