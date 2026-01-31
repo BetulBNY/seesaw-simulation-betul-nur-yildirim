@@ -1,6 +1,6 @@
-const plank = document.getElementById('plank');
 const seesawGroup = document.getElementById('seesaw-group');
 const svg = document.getElementById('sim-svg');
+resetSeasaw()
 
 const PLANKSTART = 200;
 const PLANKEND= 600;
@@ -274,7 +274,7 @@ function plankClickHandler(event) {
 
 
 // Click on plank
-plank.addEventListener('click', plankClickHandler);
+//plank.addEventListener('click', plankClickHandler);
 
 ///////////////// DOM SECTION
 function updatePanelsDOM() {
@@ -328,15 +328,14 @@ function uploadBalls() {
 
 document.getElementById("reset").addEventListener("click", resetState);
 
-function resetSvg() {
+function resetSeasaw() {
     seesawGroup.innerHTML = "";
-    const plank = createPlank();
-    seesawGroup.appendChild(plank);
-    plank.addEventListener("click", plankClickHandler);
+    createPlank();
 }
+
 function resetState() {
 
-    resetSvg()
+    resetSeasaw()
 
     placedBalls = [];
     measures = {
@@ -367,5 +366,6 @@ function createPlank() {
     plank.setAttribute("fill", "#e67e22");
     plank.setAttribute("rx", 5);
 
-    return plank;
+    seesawGroup.appendChild(plank);
+    plank.addEventListener("click", plankClickHandler);
 }
