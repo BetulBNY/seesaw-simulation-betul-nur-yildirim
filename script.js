@@ -20,24 +20,36 @@ function getRandomWeight() {
 }
 
 // Create Circle Method
-function createCircle(centerX,centerY,r,color,strokeColor,strokeWidth) {
+function createCircle(centerX,centerY,radius,color,strokeColor,strokeWidth) {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", centerX);
     circle.setAttribute("cy", centerY); 
-    circle.setAttribute("r", r);
+    circle.setAttribute("r", radius);
     circle.setAttribute("fill", color);
     circle.setAttribute("stroke", strokeColor); 
-    circle.setAttribute("stroke-width", strokeWidth);
+    circle.setAttribute("stroke-width", strokeWidth);      
 
     circle.style.pointerEvents = "none";
 
     return circle;
 }
 
-function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor = "middle",fontFamily="Arial",fontWeight="bold") {
+function createShine(radius, circleCx){
+    let shineRadius= radius * 0.2;
+    let shineCy=  (440 - radius - 1) - (radius * 0.4);
+    let shineCx= circleCx - (radius * 0.4)
+
+    return createCircle(shineCx, shineCy, shineRadius, "rgba(255, 255, 255, 0.6)")
+}
+
+function createCircleText(circleCx,circleCy=GHOST_CY , weight, textColor="white", textAnchor = "middle",fontFamily="Arial",fontWeight="bold") {
+    //let labelCy = 440 - radius +5
+    let fontSize = 10 + weight;
+    //const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
+
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("x", xLocation);
-    text.setAttribute("y", yLocation + 5);
+    text.setAttribute("x", circleCx);
+    text.setAttribute("y", circleCy + 5);
     text.setAttribute("fill", textColor);
     text.setAttribute("font-size", fontSize +"px");
     text.textContent = weight + "kg";
@@ -50,6 +62,22 @@ function createText(xLocation,yLocation,textColor,fontSize, weight, textAnchor =
     return text;
 }
 
+function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColor="rgba(0,0,0,0.2)",strokeWidth=1) {
+    const wholeCircle = createCircle(circleCx,circleCy,radius,color,strokeColor,strokeWidth)
+    const shine = createShine(radius, circleCx)
+    const label = createCircleText(circleCx,circleCy, weight)
+
+    const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    // Added to "g" seesawGroup for moving together.
+    fallingGroup.appendChild(wholeCircle);
+    fallingGroup.appendChild(shine);
+    fallingGroup.appendChild(label);
+
+    // Adding all of them to the svg group not seesaw group.
+    svg.appendChild(fallingGroup);
+    
+    return { wholeCircle, shine, label, fallingGroup} ;
+}
 
 let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
 let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
@@ -116,15 +144,14 @@ function playLandingSound(weight) {
 // GHOST CIRCLE PART
 let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
 const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-//ghostGroup.style.pointerEvents = "none";
 svg.appendChild(ghostGroup);
 
 function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
-    const r = 10 + (weight * 2);
+    const radius = 10 + (weight * 2);
 
-    const circle = createCircle(x,GHOST_CY,r,"gray")
-    const text = createText(x,GHOST_CY,"black",12,weight  )
+    const circle = createCircle(x, GHOST_CY, radius, "gray")
+    const text = createCircleText(x, GHOST_CY, weight, "black")  
 
     ghostGroup.appendChild(circle);
     ghostGroup.appendChild(text);
@@ -156,16 +183,20 @@ plank.addEventListener('click', function(event) {
     // Distance from the pivot(center)
     const distance = mouseX - 400;
 
-// CIRCLE CREATION PART
-    const weight = nextWeight; // getRandomWeight()
+    // CIRCLE CREATION PART
+    const weight = nextWeight;
     const radius = 10 + (weight * 2); 
-    const circleCy = 440 - radius
+    const circleCy = 440 - radius;
     const randomColor = getRandomColor(); 
-    const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    //const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    
     // Creating circle
-    const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
 
-    // Creating shine                        //////////////??????????????????????????????
+    const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, circleCy, radius, randomColor, weight)
+
+    /*
+    // const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
+    // Creating shine                        
     let shineRadius= radius * 0.2;
     let shineCy=  (440 - radius - 1) - (radius * 0.4);
     let shineCx= mouseX - (radius * 0.4)
@@ -182,7 +213,7 @@ plank.addEventListener('click', function(event) {
     fallingGroup.appendChild(label);
 
     // Adding all of them to the svg group not seesaw group.
-    svg.appendChild(fallingGroup);
+    svg.appendChild(fallingGroup);*/
 
 const targetY = getPlankY(distance)-radius;
 
@@ -222,12 +253,10 @@ function fallingAnimation(circle, shine, label, targetY){
     requestAnimationFrame(fallingSteps); // starts fallingSteps
 }
 
-    fallingAnimation(circle, shine, label, targetY)
+    fallingAnimation(wholeCircle, shine, label, targetY)
 
    // After the ball is created determine the next weight and update the ghost.
    nextWeight = getRandomWeight();
    updateGhost(mouseX, nextWeight);
-
-   console.log("Down:", weight, "Next:", nextWeight);
 });
 
