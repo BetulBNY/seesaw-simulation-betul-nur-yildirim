@@ -217,18 +217,20 @@ plank.addEventListener('click', function(event) {
 
 const targetY = getPlankY(distance)-radius;
 
-function fallingAnimation(circle, shine, label, targetY){
+(function fallingAnimation(circle, shine, label, targetY){
     let velocity = 0;
     let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
     const gravity = 0.5;
     const fallingSteps = () => {
-        velocity += gravity;
         currentY += velocity;
+        
         circle.setAttribute("cy",currentY)
         shine.setAttribute("cy",currentY - (radius * 0.4))
         label.setAttribute("y",currentY)
 
-        if (currentY < targetY){
+        velocity += gravity;
+
+        if (currentY + velocity < targetY){
             requestAnimationFrame(fallingSteps); // contnue fallingSteps
         }
         else{
@@ -237,23 +239,31 @@ function fallingAnimation(circle, shine, label, targetY){
             label.setAttribute("y",currentY + 5)
             seesawGroup.appendChild(fallingGroup);  // yamultuyor
             // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
-            circle.setAttribute("cx", 400 + distance);
-            circle.setAttribute("cy", 450 - radius);
+
+
+            // Calculate the angular deviation caused by rotation of the seesaw group element.
+            const angleRadian = currentAngle * (Math.PI / 180);
+            const adjustedDistance = distance / Math.cos(angleRadian);
+
+            const localCX = 400 + adjustedDistance;
+            const localCY = 450 - radius; // Kalasın üst yüzeyi
+
+            circle.setAttribute("cx", localCX);
+            circle.setAttribute("cy", localCY);
             
-            shine.setAttribute("cx", (400 + distance) - (radius * 0.4));
-            shine.setAttribute("cy", (450 - radius) - (radius * 0.4));
+            shine.setAttribute("cx", localCX - (radius * 0.4));
+            shine.setAttribute("cy", localCY - (radius * 0.4));
             
-            label.setAttribute("x", 400 + distance);
-            label.setAttribute("y", 450 - radius + 5);
+            label.setAttribute("x", localCX);
+            label.setAttribute("y", localCY + 5);
+
             placedBalls.push({weight: weight, distance: distance ,color: randomColor})
             playLandingSound(weight)
             updatePlankPosition();
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
-}
-
-    fallingAnimation(wholeCircle, shine, label, targetY)
+})(wholeCircle, shine, label, targetY)
 
    // After the ball is created determine the next weight and update the ghost.
    nextWeight = getRandomWeight();
