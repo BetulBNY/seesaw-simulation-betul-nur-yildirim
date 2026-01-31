@@ -1,6 +1,6 @@
 const seesawGroup = document.getElementById('seesaw-group');
 const svg = document.getElementById('sim-svg');
-resetSeasaw()
+resetSeesaw()
 
 const PLANKSTART = 200;
 const PLANKEND= 600;
@@ -143,14 +143,14 @@ function updateTorque(){
     return (measures.torques.right - measures.torques.left) / 20;   
 }
 
-function rotatePlank(){
-    seesawGroup.style.transform = `rotate(${measures.currentAngle}deg)`;
+export function rotatePlank(angle){
+    seesawGroup.style.transform = `rotate(${angle}deg)`;
 }
 
-function updatePlankPosition(){
+function updatePlankState(){
     let torqueDiff = updateTorque();        
     measures.currentAngle = calcuateAngle(torqueDiff);
-    rotatePlank();
+    rotatePlank(measures.currentAngle);
 }
 
 // A function that finds the instantaneous height Y of at point X
@@ -214,15 +214,12 @@ function plankClickHandler(event) {
         const weight = measures.nextWeight;
         const radius = 10 + (weight * 2); 
         const randomColor = getRandomColor(); 
-        //C
-        
         // Creating circle
-    
         const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, GHOST_CY, radius, randomColor, weight)
     
     const targetY = getPlankY(distance)-radius;
     
-    (function fallingAnimation(circle, shine, label, targetY){
+    (function fallingAnimation(wholeCircle, shine, label, targetY){
         let velocity = 0;
         let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
         const gravity = 0.5;
@@ -256,7 +253,7 @@ function plankClickHandler(event) {
     
                 seesawGroup.appendChild(fallingGroup);  // yamultuyor
                 
-                updatePlankPosition();
+                updatePlankState();
              
                 playLandingSound(weight)
                 updatePanelsDOM();
@@ -307,15 +304,15 @@ function loadStateFromLocalStorage() {
         measures = state.measures
         
         // Updat UI
-        uploadBalls();
+        uploadBalls(placedBalls);
         updatePanelsDOM()
-        rotatePlank();
+        rotatePlank(measures.currentAngle);
 
     }           
 }            
 
 
-function uploadBalls() {
+function uploadBalls(placedBalls) {
     placedBalls.map(ball => {
             const  {wholeCircle, shine, label, fallingGroup} = createCompleteCircle(ball.localCX,ball.localCY, ball.radius, ball.color, ball.weight) 
             setBallY( ball.localCY, ball.radius, wholeCircle, shine, label);
@@ -328,14 +325,14 @@ function uploadBalls() {
 
 document.getElementById("reset").addEventListener("click", resetState);
 
-function resetSeasaw() {
+function resetSeesaw() {
     seesawGroup.innerHTML = "";
     createPlank();
 }
 
 function resetState() {
 
-    resetSeasaw()
+    resetSeesaw()
 
     placedBalls = [];
     measures = {
@@ -352,7 +349,7 @@ function resetState() {
     }
 
     updatePanelsDOM();
-    rotatePlank();
+    rotatePlank(measures.currentAngle);
 }
 
 
