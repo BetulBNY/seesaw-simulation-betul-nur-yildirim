@@ -178,109 +178,99 @@ svg.addEventListener('mousemove', function(event) { // instead of mousemove on p
     }
 });
 
-// Click on plank
-plank.addEventListener('click', function(event) {
 
-// LOCATION PART
-    // Screen position of SVG
-    const rect = svg.getBoundingClientRect();
-    // Calculating x coordinate of the clicked point inside SVG
-    // (Real mouse coordiantes - Left side of the SVG (distance between frame and left of screen))
-    const mouseX = event.clientX - rect.left;
-    // Distance from the pivot(center)
-    const distance = mouseX - 400;
 
-    // CIRCLE CREATION PART
-    const weight = measures.nextWeight;
-    const radius = 10 + (weight * 2); 
-    const randomColor = getRandomColor(); 
-    //C
+
+
+
+
+
+
+
+
+function plankClickHandler(event) {
+
+    // LOCATION PART
+        // Screen position of SVG
+        const rect = svg.getBoundingClientRect();
+        // Calculating x coordinate of the clicked point inside SVG
+        // (Real mouse coordiantes - Left side of the SVG (distance between frame and left of screen))
+        const mouseX = event.clientX - rect.left;
+        // Distance from the pivot(center)
+        const distance = mouseX - 400;
     
-    // Creating circle
-
-    const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, GHOST_CY, radius, randomColor, weight)
-
-    /*
-    // const circle = createCircle(mouseX,circleCy,radius,randomColor,"rgba(0,0,0,0.2)",1)
-    // Creating shine                        
-    let shineRadius= radius * 0.2;
-    let shineCy=  (440 - radius - 1) - (radius * 0.4);
-    let shineCx= mouseX - (radius * 0.4)
-    const shine = createCircle( shineCx, shineCy,shineRadius,"rgba(255, 255, 255, 0.6)")
-
-    // Creataing Weight Txt
-    let labelCy = 440 - radius +5
-    let labelFontSize = 10 + weight
-    const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
-
-    // Added to "g" seesawGroup for moving together.
-    fallingGroup.appendChild(circle);
-    fallingGroup.appendChild(shine);
-    fallingGroup.appendChild(label);
-
-    // Adding all of them to the svg group not seesaw group.
-    svg.appendChild(fallingGroup);*/
-
-const targetY = getPlankY(distance)-radius;
-
-(function fallingAnimation(circle, shine, label, targetY){
-    let velocity = 0;
-    let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
-    const gravity = 0.5;
-    const fallingSteps = () => {
-        currentY += velocity;
+        // CIRCLE CREATION PART
+        const weight = measures.nextWeight;
+        const radius = 10 + (weight * 2); 
+        const randomColor = getRandomColor(); 
+        //C
         
-        circle.setAttribute("cy",currentY)
-        shine.setAttribute("cy",currentY - (radius * 0.4))
-        label.setAttribute("y",currentY + 5)
-
-        velocity += gravity;
-
-        if (currentY + velocity < targetY) {
-            requestAnimationFrame(fallingSteps); // contnue fallingSteps
-        }
-        else {
-            // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
-
-
-            // Calculate the angular deviation caused by rotation of the seesaw group element.
-            const angleRadian = measures.currentAngle * (Math.PI / 180);
-            const adjustedDistance = distance / Math.cos(angleRadian);
-            const localCX = 400 + adjustedDistance;
-            const localCY = 450 - radius; // Kalasın üst yüzeyi
-            
-           // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
-            placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})
-
-            circle.setAttribute("cx", localCX);
-            circle.setAttribute("cy", localCY);
-            
-            shine.setAttribute("cx", localCX - (radius * 0.4));
-            shine.setAttribute("cy", localCY - (radius * 0.4));
-            
-            label.setAttribute("x", localCX);
-            label.setAttribute("y", localCY + 5);
-
-
-            seesawGroup.appendChild(fallingGroup);  // yamultuyor
-            
-            updatePlankPosition();
-         
-            playLandingSound(weight)
-            updatePanelsDOM();
-        }
-    }
-    requestAnimationFrame(fallingSteps); // starts fallingSteps
-})(wholeCircle, shine, label, targetY)
-
-   // After the ball is created determine the next weight and update the ghost.
-   measures.nextWeight = getRandomWeight();
-   updateGhost(mouseX, measures.nextWeight);
-
-
+        // Creating circle
     
+        const { wholeCircle, shine, label, fallingGroup } = createCompleteCircle(mouseX, GHOST_CY, radius, randomColor, weight)
+    
+    const targetY = getPlankY(distance)-radius;
+    
+    (function fallingAnimation(circle, shine, label, targetY){
+        let velocity = 0;
+        let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
+        const gravity = 0.5;
+        const fallingSteps = () => {
+            currentY += velocity;
+            
+            circle.setAttribute("cy",currentY)
+            shine.setAttribute("cy",currentY - (radius * 0.4))
+            label.setAttribute("y",currentY + 5)
+    
+            velocity += gravity;
+    
+            if (currentY + velocity < targetY) {
+                requestAnimationFrame(fallingSteps); // contnue fallingSteps
+            }
+            else {
+                // Koordinatları seesawGroup'a göre sıfırlıyoruz. Topu artık mouse  click yaptığımız yere yani pivottan distance kadar uzaklığa yerleştiriyoruz.
+    
+    
+                // Calculate the angular deviation caused by rotation of the seesaw group element.
+                const angleRadian = measures.currentAngle * (Math.PI / 180);
+                const adjustedDistance = distance / Math.cos(angleRadian);
+                const localCX = 400 + adjustedDistance;
+                const localCY = 450 - radius; // Kalasın üst yüzeyi
+                
+               // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
+                placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})
+    
+                circle.setAttribute("cx", localCX);
+                circle.setAttribute("cy", localCY);
+                
+                shine.setAttribute("cx", localCX - (radius * 0.4));
+                shine.setAttribute("cy", localCY - (radius * 0.4));
+                
+                label.setAttribute("x", localCX);
+                label.setAttribute("y", localCY + 5);
+    
+    
+                seesawGroup.appendChild(fallingGroup);  // yamultuyor
+                
+                updatePlankPosition();
+             
+                playLandingSound(weight)
+                updatePanelsDOM();
+            }
+        }
+        requestAnimationFrame(fallingSteps); // starts fallingSteps
+    })(wholeCircle, shine, label, targetY)
+    
+       // After the ball is created determine the next weight and update the ghost.
+       measures.nextWeight = getRandomWeight();
+       updateGhost(mouseX, measures.nextWeight);
+    }
 
-});
+
+
+
+// Click on plank
+plank.addEventListener('click', plankClickHandler);
 
 ///////////////// DOM SECTION
 function updatePanelsDOM() {
@@ -315,6 +305,8 @@ function loadStateFromLocalStorage() {
         // Updat UI
         uploadBalls();
         updatePanelsDOM()
+        rotatePlank();
+
     }           
 }            
 
@@ -333,7 +325,48 @@ function uploadBalls() {
         }
     ) 
 
-    updatePlankPosition();
+}
+
+document.getElementById("reset").addEventListener("click", resetState);
+
+function resetSvg() {
+    seesawGroup.innerHTML = "";
+    const plank = createPlank();
+    seesawGroup.appendChild(plank);
+    plank.addEventListener("click", plankClickHandler);
+}
+function resetState() {
+
+    resetSvg()
+
+    placedBalls = [];
+    measures = {
+        torques: {
+            right: 0,
+            left: 0
+        },
+        weights: {
+            right: 0,
+            left: 0
+        },
+        currentAngle: 0, 
+        nextWeight: getRandomWeight()
+    }
+
+    updatePanelsDOM();
+    rotatePlank();
 }
 
 
+function createPlank() {
+    const plank = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    plank.setAttribute("id", "plank");
+    plank.setAttribute("x", 200);
+    plank.setAttribute("y", 440);
+    plank.setAttribute("width", 400);
+    plank.setAttribute("height", 10);
+    plank.setAttribute("fill", "#e67e22");
+    plank.setAttribute("rx", 5);
+
+    return plank;
+}
