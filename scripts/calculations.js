@@ -1,8 +1,10 @@
-export function calcuateAngle(torqueDiff) {
+
+
+function calcuateAngle(torqueDiff) {
     return Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
 }
 
-export function updateTorque(){
+function updateTorque(){
     // Calculating Torque
     const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
     if (lastBall.distance < 0) {
