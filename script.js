@@ -79,8 +79,13 @@ function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColo
     return { wholeCircle, shine, label, fallingGroup} ;
 }
 
-let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
+//let currentAngle = 0; // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
 let placedBalls = [];// Yerleşen topların listesi {weight, distance} Artık her düşen topun ağırlığını ve mesafesini bu listede tutuyoruz. Dengeyi bu listeye bakarak hesaplıyoruz.
+//let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
+const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+svg.appendChild(ghostGroup);
+
+
 const measures = {
     torques: {
         right: 0,
@@ -89,7 +94,9 @@ const measures = {
     weights: {
         right: 0,
         left: 0
-    }
+    },
+    currentAngle: 0, // Tahterevallinin o anki açısı  (0: düz, 10: sağa yatık, -10: sola yatık)
+    nextWeight: getRandomWeight()
 }
 
 function calcuateAngle(torqueDiff) {
@@ -112,19 +119,19 @@ function updateTorque(){
     return (measures.torques.right - measures.torques.left) / 20;   
 }
 
-function rotatePlank(currentAngle){
-    seesawGroup.style.transform = `rotate(${currentAngle}deg)`;
+function rotatePlank(){
+    seesawGroup.style.transform = `rotate(${measures.currentAngle}deg)`;
 }
 
 function updatePlankPosition(){
     let torqueDiff = updateTorque();        
-    const currentAngle = calcuateAngle(torqueDiff);
-    rotatePlank(currentAngle);
+    measures.currentAngle = calcuateAngle(torqueDiff);
+    rotatePlank();
 }
 
 // A function that finds the instantaneous height Y of at point X
 function getPlankY(distance) {
-    const angleRad = currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
+    const angleRad = measures.currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
     // Y = PivotY + (mesafe * sin(açı))
     return 450 + (distance * Math.sin(angleRad));       
 }
@@ -143,10 +150,6 @@ function playLandingSound(weight) {
 }
 
 // GHOST CIRCLE PART
-let nextWeight = getRandomWeight(); // at the beginning we randomly select the weight of circle
-const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-svg.appendChild(ghostGroup);
-
 function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
     const radius = 10 + (weight * 2);
@@ -166,7 +169,7 @@ svg.addEventListener('mousemove', function(event) { // instead of mousemove on p
     // If we are only in between 200-600(PLANKSTART-PLANKEND)
     if (mouseX >= PLANKSTART && mouseX <= PLANKEND) {
     // Update the ghost ball (X coordinate is the same as the mouse cursor, weight is the next weight)
-        updateGhost(mouseX, nextWeight);
+        updateGhost(mouseX, measures.nextWeight);
     } else {
         ghostGroup.style.display = "none";
     }
@@ -185,7 +188,7 @@ plank.addEventListener('click', function(event) {
     const distance = mouseX - 400;
 
     // CIRCLE CREATION PART
-    const weight = nextWeight;
+    const weight = measures.nextWeight;
     const radius = 10 + (weight * 2); 
     const circleCy = 440 - radius;
     const randomColor = getRandomColor(); 
@@ -243,7 +246,7 @@ const targetY = getPlankY(distance)-radius;
 
 
             // Calculate the angular deviation caused by rotation of the seesaw group element.
-            const angleRadian = currentAngle * (Math.PI / 180);
+            const angleRadian = measures.currentAngle * (Math.PI / 180);
             const adjustedDistance = distance / Math.cos(angleRadian);
 
             const localCX = 400 + adjustedDistance;
@@ -261,13 +264,29 @@ const targetY = getPlankY(distance)-radius;
             placedBalls.push({weight: weight, distance: distance ,color: randomColor})
             playLandingSound(weight)
             updatePlankPosition();
+            updatePanelsDOM();
+
         }
     }
     requestAnimationFrame(fallingSteps); // starts fallingSteps
 })(wholeCircle, shine, label, targetY)
 
    // After the ball is created determine the next weight and update the ghost.
-   nextWeight = getRandomWeight();
-   updateGhost(mouseX, nextWeight);
+   measures.nextWeight = getRandomWeight();
+   updateGhost(mouseX, measures.nextWeight);
+
+
+    
+
 });
+
+function updatePanelsDOM() {
+    document.getElementById("angle-value").textContent = measures.currentAngle.toFixed(1); 
+    document.getElementById("left-weight-value").textContent = measures.weights.left; 
+    document.getElementById("right-weight-value").textContent = measures.weights.right; 
+    document.getElementById("left-torque-value").textContent = measures.torques.left.toFixed(1); 
+    document.getElementById("right-torque-value").textContent = measures.torques.right.toFixed(1); 
+
+
+}
 
