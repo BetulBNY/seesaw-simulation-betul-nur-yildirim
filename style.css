@@ -125,4 +125,6 @@ svg {
   padding: 16px;
   height: 550px;
   width: 700px;
+  overflow-y: auto;  
+
 }

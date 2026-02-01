@@ -20,7 +20,7 @@ export function addNewLog(distanceToPlankCenter, weight) {
     const logItem = document.createElement("p");
     logItem.textContent = logText;
     const logsContainer = document.getElementById("logs");
-    logsContainer.appendChild(logItem);
+    logsContainer.prepend(logItem);  // Instead of appendChild, for reverse logs writing
 
     // otomatik aşağı kaydır (log artınca çok hoş oluyor)
     logsContainer.scrollTop = logsContainer.scrollHeight;

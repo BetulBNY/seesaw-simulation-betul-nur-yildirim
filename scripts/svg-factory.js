@@ -1,5 +1,5 @@
 import { plankClickHandler } from "./user-actions-handler.js";
-import { GHOST_CY, PLANK_CENTER } from "./config.js";
+import { GHOST_CY, PLANK_CENTER, PLANK_LENGTH, PLANKSTART } from "./config.js";
 
 export const svg = document.getElementById('sim-svg');              
 export const seesawGroup = document.getElementById('seesaw-group');
@@ -144,9 +144,9 @@ export function resetSeesaw() {
 export function createPlank() {
     const plank = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     plank.setAttribute("id", "plank");
-    plank.setAttribute("x", 200);
+    plank.setAttribute("x", PLANKSTART);
     plank.setAttribute("y", 440);
-    plank.setAttribute("width", PLANK_CENTER);
+    plank.setAttribute("width", PLANK_LENGTH);
     plank.setAttribute("height", 10);
     plank.setAttribute("fill", "#e67e22");
     plank.setAttribute("rx", 5);
