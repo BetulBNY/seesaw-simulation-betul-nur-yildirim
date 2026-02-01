@@ -2,18 +2,18 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
-  /* Arka plan ayarları */
+  
   background-image: url("./assets/desert_expanded.png");
-  background-color: #fce1c9; /* Resim yüklenmezse diye */
+  background-color: #fce1c9; 
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Resim hep sabit kalır */
+  background-attachment: fixed; 
   
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Üstten başlasın */
+  align-items: flex-start; 
   min-height: 100vh;
-  overflow-x: hidden; /* Sağa kaydırmayı engelle */
+  overflow-x: hidden; 
 }
 
 svg { 
@@ -129,6 +129,12 @@ svg {
   background: #b2a896;
 
 }
+
+.continue {
+  background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%) !important;
+  color: #2d5a27 !important;
+}
+
 
 #logs {
   margin: 24px auto;

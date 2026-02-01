@@ -1,6 +1,6 @@
 import { fallingAnimation, rotatePlank } from "./animation.js";
 import { createCompleteCircle, updateGhost, svg, ghostGroup, resetSeesaw } from "./svg-factory.js";
-import { measures, PLANKSTART, PLANKEND, PLANK_CENTER, GHOST_CY, placedBalls, logs } from "./config.js";
+import { measures, PLANKSTART, PLANKEND, PLANK_CENTER, GHOST_CY, placedBalls, logs, isPaused, setPause } from "./config.js";
 import { getRandomWeight, getRandomColor, getPlankY} from "./calculations.js";
 import { updatePanelsDOM, addNewLog, resetLogs } from "./dom-access.js";
 
@@ -20,6 +20,12 @@ export function mouseMoveHandler(event) { // instead of mousemove on plank I cha
 }
 
 export function plankClickHandler(event) {
+
+    if (isPaused) {
+        alert("Simulaiton is paused! To drop the ball, click continue button.");
+        return;
+    }
+    
     // LOCATION PART
     // Screen position of SVG
     const rect = svg.getBoundingClientRect();
@@ -73,6 +79,22 @@ export function resetStateHandler() {
 
     resetLogs()
     //updateLogsDOM()
+}
+
+export const pauseBtn = document.getElementById('pause');
+
+export function pauseHandler() {
+    setPause(!isPaused)
+    console.log("sefsdfsdf")
+    if (isPaused) {
+        // Duraklatma 
+        pauseBtn.textContent = "CONTINUE";
+        pauseBtn.classList.add("continue"); 
+    } else {
+        // Devam 
+        pauseBtn.textContent = "PAUSE";
+        pauseBtn.classList.remove("continue"); 
+    }
 }
 
 
