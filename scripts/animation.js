@@ -1,5 +1,5 @@
 import { seesawGroup, setBallY, setBallX } from "./svg-factory.js";
-import { measures, GHOST_CY, placedBalls, PLANK_CENTER } from "./config.js";
+import { measures, GHOST_CY, placedBalls, PLANK_CENTER, PLANK_Y } from "./config.js";
 import { updatePlankState } from "./calculations.js";
 import { playLandingSound } from "./audio.js";
 import { updatePanelsDOM } from "./dom-access.js";
@@ -28,7 +28,7 @@ export function fallingAnimation(wholeCircle, shine, label, targetY, fallingGrou
             const angleRadian = measures.currentAngle * (Math.PI / 180);
             const adjustedDistance = distance / Math.cos(angleRadian);
             const localCX = PLANK_CENTER + adjustedDistance;
-            const localCY = 450 - radius; // Kalasın üst yüzeyi
+            const localCY = PLANK_Y - radius; // Kalasın üst yüzeyi
             
             // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
             placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})

@@ -1,6 +1,5 @@
 body {
   margin: 0; 
-  height: 100vh; 
   background-color: #f0f0f0;
   font-family: 'Arial', sans-serif;
 }
@@ -21,7 +20,8 @@ svg {
   width: 90%;
   display: flex;
   flex-direction: row;
-  margin: 80px auto;
+  margin: 0 auto;
+  margin-top: 15px;
   align-items: center;
   gap:20px;
 }
@@ -30,7 +30,7 @@ svg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 25px;
+  gap: 20px;
 }
 
 .panels{
@@ -45,7 +45,7 @@ svg {
   flex-direction: column;
   align-items: center;
   width: 120px;
-  height: 110px;
+  height: 100px;
   background: linear-gradient(145deg, #fff5f5 0%, #ffe8ed 50%, #ffd9e0 100%);
   padding:5px;
   border-radius: 10px;
@@ -79,7 +79,7 @@ svg {
   display: flex;
   gap: 12px;
   justify-content: center;
-  margin: 19px 0;
+  margin: 0;
 }
 
 #buttons button {
@@ -115,16 +115,33 @@ svg {
 
 }
 
+
+
+
 #logs {
-  width: 40%;
-  margin: auto auto;
+  margin: 24px auto;
   background: linear-gradient(145deg, #fff5f5 0%, #ffe8ed 100%);
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 4px 12px rgba(253, 173, 186, 0.2);
-  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 182, 193, 0.6);
+  padding: 14px;
   height: 550px;
   width: 700px;
-  overflow-y: auto;  
+  overflow-y: auto;
+}
 
+#logs p {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 10px;
+  color: #774a76;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #e84393c6;
+}
+
+#logs p:hover {
+  transform: translateX(3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }

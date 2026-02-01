@@ -11,7 +11,7 @@ export function mouseMoveHandler(event) { // instead of mousemove on plank I cha
     const mouseX = event.clientX - rect.left;  
 
     // If we are only in between 200-600(PLANKSTART-PLANKEND)
-    if (mouseX >= PLANKSTART && mouseX <= PLANKEND) {
+    if (mouseX >= PLANKSTART-1 && mouseX <= PLANKEND) {
     // Update the ghost ball (X coordinate is the same as the mouse cursor, weight is the next weight)
         updateGhost(mouseX, measures.nextWeight);
     } else {

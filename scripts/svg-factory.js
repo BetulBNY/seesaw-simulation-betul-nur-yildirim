@@ -1,5 +1,5 @@
 import { plankClickHandler } from "./user-actions-handler.js";
-import { GHOST_CY, PLANK_CENTER, PLANK_LENGTH, PLANKSTART } from "./config.js";
+import { GHOST_CY, PLANK_CENTER, PLANK_LENGTH, PLANKSTART, PLANK_Y } from "./config.js";
 
 export const svg = document.getElementById('sim-svg');              
 export const seesawGroup = document.getElementById('seesaw-group');
@@ -39,9 +39,9 @@ function createCircle(centerX,centerY,radius,color,strokeColor,strokeWidth) {
 }
 
 function createShine(radius, circleCx){
-    let shineRadius= radius * 0.2;
-    let shineCy=  (440 - radius - 1) - (radius * 0.4);
-    let shineCx= circleCx - (radius * 0.4)
+    let shineRadius = radius * 0.2;
+    let shineCy =  (PLANK_Y-10 - radius - 1) - (radius * 0.4);
+    let shineCx = circleCx - (radius * 0.4)
 
     return createCircle(shineCx, shineCy, shineRadius, "rgba(255, 255, 255, 0.6)")
 }
@@ -145,7 +145,7 @@ export function createPlank() {
     const plank = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     plank.setAttribute("id", "plank");
     plank.setAttribute("x", PLANKSTART);
-    plank.setAttribute("y", 440);
+    plank.setAttribute("y", PLANK_Y-10);
     plank.setAttribute("width", PLANK_LENGTH);
     plank.setAttribute("height", 10);
     plank.setAttribute("fill", "#e67e22");

@@ -4,8 +4,9 @@ export const PLANKSTART = 100;
 export const PLANKEND = 500;
 export const PLANK_LENGTH = PLANKEND - PLANKSTART; 
 export const PLANK_CENTER = (PLANKEND + PLANKSTART) / 2;
+export const PLANK_Y = 350;
 
-export const GHOST_CY = 200;
+export const GHOST_CY = 100;
 export const MAX_ANGLE = 30;
 
 // List of colors

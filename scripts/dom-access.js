@@ -8,9 +8,6 @@ export function updatePanelsDOM() {
     document.getElementById("right-torque-value").textContent = measures.torques.right.toFixed(1); 
 }
 
-
-
-
 export function addNewLog(distanceToPlankCenter, weight) {
     // creating
     const direction = distanceToPlankCenter >= 0? "right" : "left";
@@ -22,8 +19,6 @@ export function addNewLog(distanceToPlankCenter, weight) {
     const logsContainer = document.getElementById("logs");
     logsContainer.prepend(logItem);  // Instead of appendChild, for reverse logs writing
 
-    // otomatik aşağı kaydır (log artınca çok hoş oluyor)
-    logsContainer.scrollTop = logsContainer.scrollHeight;
 }
 
 export function resetLogs() {
