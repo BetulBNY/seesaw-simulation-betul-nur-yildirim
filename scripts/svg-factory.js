@@ -1,5 +1,5 @@
 import { plankClickHandler } from "./user-actions-handler.js";
-import { GHOST_CY } from "./config.js";
+import { GHOST_CY, PLANK_CENTER } from "./config.js";
 
 export const svg = document.getElementById('sim-svg');              
 export const seesawGroup = document.getElementById('seesaw-group');
@@ -46,7 +46,7 @@ function createShine(radius, circleCx){
     return createCircle(shineCx, shineCy, shineRadius, "rgba(255, 255, 255, 0.6)")
 }
 
-function createCircleText(circleCx,circleCy=GHOST_CY , weight, textColor="white", textAnchor = "middle",fontFamily="Arial",fontWeight="bold") {
+function createCircleText(circleCx, circleCy=GHOST_CY , weight, textColor="white", textAnchor = "middle", fontFamily="Arial", fontWeight="bold") {
     //let labelCy = 440 - radius +5
     let fontSize = 10 + weight;
     //const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
@@ -63,6 +63,19 @@ function createCircleText(circleCx,circleCy=GHOST_CY , weight, textColor="white"
     text.setAttribute("font-weight", fontWeight);
     text.style.pointerEvents = "none";
 
+    return text;
+}
+
+function createDistanceText (distanceToPlankCenter, circleCx, circleCy=GHOST_CY , radius, textColor="black", fontFamily="Arial", fontWeight="bold", fontSize = 12) {
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", circleCx + radius);
+    text.setAttribute("y", circleCy - radius);
+    text.setAttribute("fill", textColor);
+    text.setAttribute("font-size", fontSize +"px");
+    text.textContent = distanceToPlankCenter + "px";
+    text.setAttribute("font-family", fontFamily);
+    text.setAttribute("font-weight", fontWeight);
+    text.style.pointerEvents = "none";
     return text;
 }
 
@@ -83,12 +96,15 @@ export function setBallX(cx, radius, wholeCircle, shine, label) {
 export function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
     const radius = 10 + (weight * 2);
+    const distanceToPlankCenter = x - PLANK_CENTER;
 
     const circle = createCircle(x, GHOST_CY, radius, "gray")
-    const text = createCircleText(x, GHOST_CY, weight, "black")  
+    const text = createCircleText(x, GHOST_CY, weight, "black")
+    const distanceText = createDistanceText(distanceToPlankCenter.toFixed(0), x, GHOST_CY, radius, "grey");
 
     ghostGroup.appendChild(circle);
     ghostGroup.appendChild(text);
+    ghostGroup.appendChild(distanceText);
     ghostGroup.style.display = "block";
 }
 
@@ -113,7 +129,7 @@ export function createPlank() {
     plank.setAttribute("id", "plank");
     plank.setAttribute("x", 200);
     plank.setAttribute("y", 440);
-    plank.setAttribute("width", 400);
+    plank.setAttribute("width", PLANK_CENTER);
     plank.setAttribute("height", 10);
     plank.setAttribute("fill", "#e67e22");
     plank.setAttribute("rx", 5);
