@@ -23,4 +23,11 @@ export let measures = {
     nextWeight: getRandomWeight()
 }
 
+export function setPlacedBalls(newPlacedBalls) { // başka dosyalardan value atayabilmek için
+    placedBalls = newPlacedBalls;
+}
+
+export function setMeasures(newMeasures) { 
+    measures = newMeasures;
+}
 
