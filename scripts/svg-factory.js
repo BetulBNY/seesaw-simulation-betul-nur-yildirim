@@ -95,8 +95,6 @@ function createDashedDistanceLine(x1, x2, y) {
     return line;
 }
 
-
-
 export function setBallY(cy, radius, wholeCircle, shine, label) {
     wholeCircle.setAttribute("cy", cy)
     shine.setAttribute("cy", cy - (radius * 0.4))
@@ -137,7 +135,6 @@ export function uploadBalls(placedBalls) {
         }
     ) 
 }
-
 
 export function resetSeesaw() {
     seesawGroup.innerHTML = "";
