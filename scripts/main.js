@@ -1,4 +1,11 @@
+import {resetSeesaw} from "./svg-factory.js";
+
+import { saveStateToLocalStorage, loadStateFromLocalStorage } from "./storage.js";
+import { svg } from "./svg-factory.js";
+import { mouseMoveHandler, resetStateHandler } from "./user-actions-handler.js";
+
 resetSeesaw()
+//plankClickHandler()
 
 window.addEventListener("beforeunload", saveStateToLocalStorage);
 window.addEventListener("load", loadStateFromLocalStorage);

@@ -1,4 +1,10 @@
-import fallingAnimation, createCompleteCircle, getRandomWeight, measures, updateGhost;
+import { fallingAnimation, rotatePlank } from "./animation.js";
+import { createCompleteCircle, updateGhost, svg, ghostGroup, resetSeesaw } from "./svg-factory.js";
+import { measures, PLANKSTART, PLANKEND, GHOST_CY, placedBalls } from "./config.js";
+import { getRandomWeight, getRandomColor, getPlankY} from "./calculations.js";
+import { updatePanelsDOM } from "./dom-access.js";
+
+
 
 export function mouseMoveHandler(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between 200-600
     const rect = svg.getBoundingClientRect();
@@ -32,7 +38,7 @@ export function plankClickHandler(event) {
     
     const targetY = getPlankY(distance)-radius;
     
-    fallingAnimation(wholeCircle, shine, label, targetY);
+    fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distance, weight, randomColor);
     
    // After the ball is created determine the next weight and update the ghost.
     measures.nextWeight = getRandomWeight();
@@ -44,6 +50,8 @@ export function resetStateHandler() {
 
     resetSeesaw()
 
+
+    /*
     placedBalls = [];
     measures = {
         torques: {
@@ -56,7 +64,21 @@ export function resetStateHandler() {
         },
         currentAngle: 0, 
         nextWeight: getRandomWeight()
-    }
+    }*/
+
+         // placedBalls reset
+    placedBalls.length = 0;
+
+    // measures reset
+    measures.torques.right = 0;
+    measures.torques.left = 0;
+
+    measures.weights.right = 0;
+    measures.weights.left = 0;
+
+    measures.currentAngle = 0;
+    measures.nextWeight = getRandomWeight();
+
 
     updatePanelsDOM();
     rotatePlank(measures.currentAngle);

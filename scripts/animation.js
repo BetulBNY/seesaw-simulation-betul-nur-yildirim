@@ -1,10 +1,15 @@
-import seesawgr, measures
+import { seesawGroup, setBallY, setBallX } from "./svg-factory.js";
+import { measures, GHOST_CY, placedBalls } from "./config.js";
+import { updatePlankState } from "./calculations.js";
+import { playLandingSound } from "./audio.js";
+import { updatePanelsDOM } from "./dom-access.js";
+
 
 
 export function rotatePlank(){
     seesawGroup.style.transform = `rotate(${measures.currentAngle}deg)`;
 }    
-export function fallingAnimation(wholeCircle, shine, label, targetY){
+export function fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distance, weight, randomColor){   
     let velocity = 0;
     let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
     const gravity = 0.5;

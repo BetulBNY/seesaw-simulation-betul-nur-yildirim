@@ -1,9 +1,10 @@
-const svg = document.getElementById('sim-svg');
-const seesawGroup = document.getElementById('seesaw-group');
+import { plankClickHandler } from "./user-actions-handler.js";
+import { GHOST_CY } from "./config.js";
 
+export const svg = document.getElementById('sim-svg');              
+export const seesawGroup = document.getElementById('seesaw-group');
 export const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(ghostGroup);
-
 
 // Create Circle Method
 export function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColor="rgba(0,0,0,0.2)",strokeWidth=1) {
@@ -65,7 +66,6 @@ function createCircleText(circleCx,circleCy=GHOST_CY , weight, textColor="white"
     return text;
 }
 
-
 export function setBallY(cy, radius, wholeCircle, shine, label) {
     wholeCircle.setAttribute("cy", cy)
     shine.setAttribute("cy", cy - (radius * 0.4))
@@ -77,9 +77,6 @@ export function setBallX(cx, radius, wholeCircle, shine, label) {
     shine.setAttribute("cx", cx - (radius * 0.4));
     label.setAttribute("x", cx);
 }
-
-
-
 
 
 // GHOST CIRCLE PART

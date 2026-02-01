@@ -1,3 +1,6 @@
+import { measures, colors, placedBalls, MAX_ANGLE } from "./config.js";
+import { rotatePlank } from "./animation.js";
+
 // A function that finds the instantaneous height Y of at point X
 export function getPlankY(distance) {
     const angleRad = measures.currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 

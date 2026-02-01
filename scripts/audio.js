@@ -1,5 +1,5 @@
 // Sound Method
-function playLandingSound(weight) {
+export function playLandingSound(weight) {
     const audioContext = new AudioContext();
     const osc = audioContext.createOscillator(); // soruce of sound
 

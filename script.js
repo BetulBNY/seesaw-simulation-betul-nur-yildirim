@@ -143,7 +143,7 @@ function updateTorque(){
     return (measures.torques.right - measures.torques.left) / 20;   
 }
 
-export function rotatePlank(angle){
+function rotatePlank(angle){
     seesawGroup.style.transform = `rotate(${angle}deg)`;
 }
 
