@@ -72,12 +72,30 @@ function createDistanceText (distanceToPlankCenter, circleCx, circleCy=GHOST_CY 
     text.setAttribute("y", circleCy - radius);
     text.setAttribute("fill", textColor);
     text.setAttribute("font-size", fontSize +"px");
+
     text.textContent = distanceToPlankCenter + "px";
     text.setAttribute("font-family", fontFamily);
     text.setAttribute("font-weight", fontWeight);
     text.style.pointerEvents = "none";
     return text;
 }
+
+function createDashedDistanceLine(x1, x2, y) {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+    line.setAttribute("x1", x1);
+    line.setAttribute("y1", y);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y);
+
+    line.setAttribute("stroke", "grey");
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("stroke-dasharray", "10 4"); // kesik çizgi
+    line.setAttribute("opacity", "0.4");
+    return line;
+}
+
+
 
 export function setBallY(cy, radius, wholeCircle, shine, label) {
     wholeCircle.setAttribute("cy", cy)
@@ -101,7 +119,9 @@ export function updateGhost(x, weight) {
     const circle = createCircle(x, GHOST_CY, radius, "gray")
     const text = createCircleText(x, GHOST_CY, weight, "black")
     const distanceText = createDistanceText(distanceToPlankCenter.toFixed(0), x, GHOST_CY, radius, "grey");
-
+    const dashedLine = createDashedDistanceLine( PLANK_CENTER, x, GHOST_CY);
+    
+    ghostGroup.appendChild(dashedLine);
     ghostGroup.appendChild(circle);
     ghostGroup.appendChild(text);
     ghostGroup.appendChild(distanceText);
