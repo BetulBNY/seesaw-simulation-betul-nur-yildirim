@@ -1,6 +1,7 @@
 body {
   margin: 0; 
   background-color: #f0f0f0;
+  background-image: url("./assets/desert_expanded.png");
   font-family: 'Arial', sans-serif;
 }
 svg { 
@@ -13,7 +14,8 @@ svg {
       #fadadd 35%,  
       #fce1c9 65%,  
       #fff1c1 100%); 
-  border: 2px solid #333;
+  border-radius: 15px;  
+  box-shadow: 0 8px 25px rgba(247, 244, 244, 0.958);  
 } 
 
 .page-wrapper{
@@ -114,8 +116,6 @@ svg {
   background: #b2a896;
 
 }
-
-
 
 
 #logs {
