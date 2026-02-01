@@ -31,3 +31,11 @@ function updateTorque(){
     return (measures.torques.right - measures.torques.left) / 20;   
 }
 
+// Random color generator
+export function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+// Random wieght generator
+export function getRandomWeight() {
+    return Math.floor(Math.random() * 10) + 1;
+}
