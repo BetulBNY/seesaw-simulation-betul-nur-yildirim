@@ -70,6 +70,7 @@ The project is structured with a simple directory layout. All JavaScript source 
  
 ### 3.1 Modular Architecture
 The project follows a modular architecture with javascript logic separated into relevant files, abiding to responsibility. (physics, storage, etc.).  **9 distinct modules**: 
+```text
 seesaw-physics-simulator/
     ├── index.html # Main HTML structure
     ├── style.css # Global styles and layout
@@ -86,7 +87,7 @@ seesaw-physics-simulator/
         ├── dom-access.js # DOM updates and UI panel management
         ├── storage.js # Browser localStorage persistence
         └── audio.js # Sound generation using Web Audio API
- 
+```
 ### 3.2 Event Flow
 User Mouse Move → Update Ghost Circle
 User Click → Create Ball → Start Fall Animation → Calculate Landing → Update Physics → Play Sound → Update UI
