@@ -118,19 +118,19 @@ Visual design was given particular attention in order to create an aesthetic vis
 ### 4.5 Steps
 The project was developed in a step-by-step manner so that 1 feature was completely handled and implemented correctlybefore diving to the next.
  
-** Step 1: Creating the SVG World **
+- ** Step 1: Creating the SVG World **
 The development process began with setting up the SVG environment.  
 The HTML tags, background layers (sky, ground), and coordinate system were defined to establish a consistent visual and mathematical space for simulation.
-** Step 2: Drawing the Seesaw **
+- ** Step 2: Drawing the Seesaw **
 The seesaw structure then created using basic SVG elements.  
 The pivot and plank were positioned in their exact coordinates, and the transform origin was precisely centered to ensure correct and realistic rotation behavior.
-** Step 3: User Interactions **
+- ** Step 3: User Interactions **
 After the visual structure was completed, user interaction logic was introduced.  
 Click positions on the plank were detected with event handling callback functions, and objects were dynamically spawned at the corresponding locations based on user input.
-** Step 4: Physics & Torque Calculation **
+- ** Step 4: Physics & Torque Calculation **
 The core physics logic was implemented next.    
 Torque calculations were based on the moment formula (W × D), and trigonometric adjustments were applied to solve the slope challenge, allowing objects to land on the current point on tilted surfaces.
-** Step 5: Animation & Persistence **
+- ** Step 5: Animation & Persistence **
 In the final step, animation and persistence features were added.  
 Falling and rotating animations were refined for smooth motion, and LocalStorage was integrated to preserve the simulation state across browser sessions. And with the pause and reset features, better user experience was achieved.
  
