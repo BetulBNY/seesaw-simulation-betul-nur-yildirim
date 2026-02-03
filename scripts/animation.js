@@ -4,47 +4,41 @@ import { updatePlankState } from "./calculations.js";
 import { playLandingSound } from "./audio.js";
 import { updatePanelsDOM } from "./dom-access.js";
 
-
-
 export function rotatePlank(){
     seesawGroup.style.transform = `rotate(${measures.currentAngle}deg)`;
-}    
+} 
+   
 export function fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distance, weight, randomColor){   
     let velocity = 0;
-    let currentY = GHOST_CY     // başlangıç noktası GHOST_CY(250)
+    let currentY = GHOST_CY     // Start Point of the ball
     const gravity = 0.5;
+
     const fallingSteps = () => {
         currentY += velocity;
-        
         setBallY(currentY, radius, wholeCircle, shine, label)
-
         velocity += gravity;
 
         if (currentY + velocity < targetY) {
-            requestAnimationFrame(fallingSteps); // contnue fallingSteps
+            requestAnimationFrame(fallingSteps); // continue falling steps
         }
         else {
             // Calculate the angular deviation caused by rotation of the seesaw group element.
             const angleRadian = measures.currentAngle * (Math.PI / 180);
             const adjustedDistance = distance / Math.cos(angleRadian);
             const localCX = PLANK_CENTER + adjustedDistance;
-            const localCY = PLANK_Y - radius; // Kalasın üst yüzeyi
+            const localCY = PLANK_Y - radius; // Plank's top surface
             
-            // placedBalls.push({weight: weight, distance: distance ,color: randomColor})
             placedBalls.push({weight: weight, distance: distance ,color: randomColor, localCX:localCX, localCY:localCY, radius:radius})
 
-            setBallY(localCY, radius, wholeCircle, shine, label);
-            
+            setBallY(localCY, radius, wholeCircle, shine, label);            
             setBallX(localCX, radius, wholeCircle, shine, label);
 
-
-            seesawGroup.appendChild(fallingGroup);  // yamultuyor
+            seesawGroup.appendChild(fallingGroup);  // appending to seesaw group
             
             updatePlankState();
-            
             playLandingSound(weight)
             updatePanelsDOM();
         }
     }
-    requestAnimationFrame(fallingSteps); // starts fallingSteps
+    requestAnimationFrame(fallingSteps); // starts falling steps
 }

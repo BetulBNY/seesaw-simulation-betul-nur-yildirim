@@ -21,18 +21,18 @@ export function loadStateFromLocalStorage() {
 
         setPlacedBalls(state.placedBalls);
         setMeasures(state.measures);
-        setLogs(state.logs);  // save to lcoalstorage
+        setLogs(state.logs);  // save to local storage
         
         setPause(!state.isPaused);
         //console.log(state.isPaused)
 
         pauseHandler()
-        // Updat UI
+        // Update UI
         uploadBalls(placedBalls);
         updatePanelsDOM()
         rotatePlank(measures.currentAngle);
 
-        console.log(logs,"loglar yüklendi");
+        console.log(logs,"logs loaded");
         for (let log of logs){
             addNewLog(log.distanceToPlankCenter, log.weight)
         }

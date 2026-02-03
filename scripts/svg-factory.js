@@ -6,19 +6,18 @@ export const seesawGroup = document.getElementById('seesaw-group');
 export const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(ghostGroup);
 
-// Create Circle Method
+// Create Circle Function
 export function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColor="rgba(0,0,0,0.2)",strokeWidth=1) {
     const wholeCircle = createCircle(circleCx,circleCy,radius,color,strokeColor,strokeWidth)
     const shine = createShine(radius, circleCx)
     const label = createCircleText(circleCx,circleCy, weight)
-
     const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    // Added to "g" seesawGroup for moving together.
+    // Added to "g" seesawGroup for moving together (same position)
     fallingGroup.appendChild(wholeCircle);
     fallingGroup.appendChild(shine);
     fallingGroup.appendChild(label);
 
-    // Adding all of them to the svg group not seesaw group.
+    // Adding all of them to the svg group not seesaw group (separate group for each ball)
     svg.appendChild(fallingGroup);
     
     return { wholeCircle, shine, label, fallingGroup} ;
@@ -32,7 +31,6 @@ function createCircle(centerX,centerY,radius,color,strokeColor,strokeWidth) {
     circle.setAttribute("fill", color);
     circle.setAttribute("stroke", strokeColor); 
     circle.setAttribute("stroke-width", strokeWidth);      
-
     circle.style.pointerEvents = "none";
 
     return circle;
@@ -47,18 +45,15 @@ function createShine(radius, circleCx){
 }
 
 function createCircleText(circleCx, circleCy=GHOST_CY , weight, textColor="white", textAnchor = "middle", fontFamily="Arial", fontWeight="bold") {
-    //let labelCy = 440 - radius +5
     let fontSize = 10 + weight;
-    //const label = createText(mouseX,labelCy,"white",labelFontSize, weight)
-
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+
     text.setAttribute("x", circleCx);
     text.setAttribute("y", circleCy + 5);
     text.setAttribute("fill", textColor);
     text.setAttribute("font-size", fontSize +"px");
     text.textContent = weight + "kg";
-
-    text.setAttribute("text-anchor", textAnchor); // Center horizontally
+    text.setAttribute("text-anchor", textAnchor); // Center horizontally (middle of the circle)
     text.setAttribute("font-family", fontFamily);
     text.setAttribute("font-weight", fontWeight);
     text.style.pointerEvents = "none";
@@ -68,11 +63,11 @@ function createCircleText(circleCx, circleCy=GHOST_CY , weight, textColor="white
 
 function createDistanceText (distanceToPlankCenter, circleCx, circleCy=GHOST_CY , radius, textColor="black", fontFamily="Arial", fontWeight="bold", fontSize = 12) {
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+
     text.setAttribute("x", circleCx + radius);
     text.setAttribute("y", circleCy - radius);
     text.setAttribute("fill", textColor);
     text.setAttribute("font-size", fontSize +"px");
-
     text.textContent = distanceToPlankCenter + "px";
     text.setAttribute("font-family", fontFamily);
     text.setAttribute("font-weight", fontWeight);
@@ -87,10 +82,9 @@ function createDashedDistanceLine(x1, x2, y) {
     line.setAttribute("y1", y);
     line.setAttribute("x2", x2);
     line.setAttribute("y2", y);
-
     line.setAttribute("stroke", "grey");
     line.setAttribute("stroke-width", "2");
-    line.setAttribute("stroke-dasharray", "10 4"); // kesik çizgi
+    line.setAttribute("stroke-dasharray", "10 4"); // dashed line
     line.setAttribute("opacity", "0.4");
     return line;
 }
@@ -108,12 +102,11 @@ export function setBallX(cx, radius, wholeCircle, shine, label) {
 }
 
 
-// GHOST CIRCLE PART
+// GHOST CIRCLE SECTION
 export function updateGhost(x, weight) {
     ghostGroup.innerHTML = ''; 
     const radius = 10 + (weight * 2);
     const distanceToPlankCenter = x - PLANK_CENTER;
-
     const circle = createCircle(x, GHOST_CY, radius, "gray")
     const text = createCircleText(x, GHOST_CY, weight, "black")
     const distanceText = createDistanceText(distanceToPlankCenter.toFixed(0), x, GHOST_CY, radius, "grey");

@@ -4,7 +4,7 @@ export function playLandingSound(weight) {
     const osc = audioContext.createOscillator(); // soruce of sound
 
     osc.type = "triangle"; // type of sound
-    osc.frequency.value = 220 - weight * 7; // ağırlık arttıkça tizlik azalyor
+    osc.frequency.value = 220 - weight * 7; // as weight increases, frequency decreases
 
     osc.connect(audioContext.destination);
     osc.start();

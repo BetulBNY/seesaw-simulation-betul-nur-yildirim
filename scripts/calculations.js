@@ -4,8 +4,8 @@ import { rotatePlank } from "./animation.js";
 // A function that finds the instantaneous height Y of at point X
 export function getPlankY(distance) {
     const angleRad = measures.currentAngle * (Math.PI / 180);  // Turned degree to radian. rad = degree * (PI / 180) 
-    // Y = PivotY + (mesafe * sin(açı))
-    return PLANK_Y + (distance * Math.tan(angleRad));             //////////////////////////????????????????????????????? Tan      
+    // Y = PivotY + (distance * sin(angle))
+    return PLANK_Y + (distance * Math.tan(angleRad));                 
 }
 
 export function updatePlankState(){
@@ -20,9 +20,9 @@ function calcuateAngle(torqueDiff) {
 
 function updateTorque(){
     // Calculating Torque
-    const lastBall = placedBalls[placedBalls.length - 1]; // sürekli bütün listeyi dönmek yerine son elemanı güncelliyoruz
+    const lastBall = placedBalls[placedBalls.length - 1]; // instead of looping through all the list, we are updating the last element
     if (lastBall.distance < 0) {
-        // Left S,de
+        // Left Side
         measures.weights.left += lastBall.weight;
         measures.torques.left += lastBall.weight * Math.abs(lastBall.distance);
     } else {

@@ -9,16 +9,14 @@ export function updatePanelsDOM() {
 }
 
 export function addNewLog(distanceToPlankCenter, weight) {
-    // creating
+    // creating log text
     const direction = distanceToPlankCenter >= 0? "right" : "left";
     const logText = `${weight} kg shiny ball was dropped on the ${direction} side, ${Math.abs(distanceToPlankCenter).toFixed(0)} px horizontally from the pivot.`
     
-
     const logItem = document.createElement("p");
     logItem.textContent = logText;
     const logsContainer = document.getElementById("logs");
-    logsContainer.prepend(logItem);  // Instead of appendChild, for reverse logs writing
-
+    logsContainer.prepend(logItem);  // Instead of appendChild, for reverse logs writing (newest logs at the top)
 }
 
 export function resetLogs() {
