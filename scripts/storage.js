@@ -1,8 +1,7 @@
 import { measures, placedBalls, setPlacedBalls, setMeasures, logs, setLogs, isPaused, setPause } from "./config.js";
 import { uploadBalls } from "./svg-factory.js";
-import { updatePanelsDOM, addNewLog } from "./dom-access.js";
+import { updatePanelsDOM, addNewLog, setPauseDom } from "./dom-access.js";
 import { rotatePlank } from "./animation.js";
-import { pauseHandler } from "./user-actions-handler.js";
 
 export function saveStateToLocalStorage() {
     const state = {
@@ -23,18 +22,19 @@ export function loadStateFromLocalStorage() {
         setMeasures(state.measures);
         setLogs(state.logs);  // save to local storage
         
-        setPause(!state.isPaused);
+        setPause(state.isPaused);
         //console.log(state.isPaused)
 
-        pauseHandler()
+        setPauseDom(state.isPaused)
         // Update UI
         uploadBalls(placedBalls);
         updatePanelsDOM()
         rotatePlank(measures.currentAngle);
 
         console.log(logs,"logs loaded");
+        
         for (let log of logs){
             addNewLog(log.distanceToPlankCenter, log.weight)
-        }
+        }   
     }           
 }           

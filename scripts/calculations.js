@@ -31,7 +31,7 @@ function updateTorque(){
         measures.torques.right += lastBall.weight * Math.abs(lastBall.distance);
     }
 
-    return (measures.torques.right - measures.torques.left) / 20;   
+    return (measures.torques.right - measures.torques.left) / 30;   
 }
 
 // Random color generator

@@ -1,4 +1,4 @@
-import { measures, logs, setLogs } from "./config.js";
+import { measures, setLogs, isPaused} from "./config.js";
 
 export function updatePanelsDOM() {
     document.getElementById("angle-value").textContent = `${measures.currentAngle.toFixed(1)}°`; 
@@ -25,4 +25,16 @@ export function resetLogs() {
     setLogs([]);
 }
 
+const pauseBtn = document.getElementById('pause');
+export function setPauseDom(isPaused) {
+    if (isPaused) {
+        // Pause
+        pauseBtn.textContent = "CONTINUE";
+        pauseBtn.classList.add("continue"); 
+    } else {
+        // Continue
+        pauseBtn.textContent = "PAUSE";
+        pauseBtn.classList.remove("continue"); 
+    }
 
+}

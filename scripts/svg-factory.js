@@ -6,6 +6,7 @@ export const seesawGroup = document.getElementById('seesaw-group');
 export const ghostGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
 svg.appendChild(ghostGroup);
 
+
 // Create Circle Function
 export function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColor="rgba(0,0,0,0.2)",strokeWidth=1) {
     const wholeCircle = createCircle(circleCx,circleCy,radius,color,strokeColor,strokeWidth)
@@ -19,7 +20,6 @@ export function createCompleteCircle(circleCx,circleCy,radius,color, weight, str
 
     // Adding all of them to the svg group not seesaw group (separate group for each ball)
     svg.appendChild(fallingGroup);
-    
     return { wholeCircle, shine, label, fallingGroup} ;
 }
 
@@ -40,6 +40,7 @@ function createShine(radius, circleCx){
     let shineRadius = radius * 0.2;
     let shineCy =  (PLANK_Y-10 - radius - 1) - (radius * 0.4);
     let shineCx = circleCx - (radius * 0.4)
+
 
     return createCircle(shineCx, shineCy, shineRadius, "rgba(255, 255, 255, 0.6)")
 }
@@ -127,6 +128,7 @@ export function uploadBalls(placedBalls) {
             seesawGroup.appendChild(fallingGroup);       
         }
     ) 
+    //console.log("placed Balls:", placedBalls)
 }
 
 export function resetSeesaw() {

@@ -2,7 +2,7 @@ import { fallingAnimation, rotatePlank } from "./animation.js";
 import { createCompleteCircle, updateGhost, svg, ghostGroup, resetSeesaw } from "./svg-factory.js";
 import { measures, PLANKSTART, PLANKEND, PLANK_CENTER, GHOST_CY, placedBalls, logs, isPaused, setPause } from "./config.js";
 import { getRandomWeight, getRandomColor, getPlankY} from "./calculations.js";
-import { updatePanelsDOM, addNewLog, resetLogs } from "./dom-access.js";
+import { updatePanelsDOM, addNewLog, resetLogs, setPauseDom } from "./dom-access.js";
 
 export function mouseMoveHandler(event) { // instead of mousemove on plank I changed it to svg for able to see ghost circle between PLANKSTART-PLANKEND
     const rect = svg.getBoundingClientRect();
@@ -36,7 +36,7 @@ export function plankClickHandler(event) {
     const targetY = getPlankY(distanceToPlankCenter)-radius;
 
     addNewLog(distanceToPlankCenter, weight);  // write to frontend
-    logs.push({distanceToPlankCenter, weight}); // save to logs
+    logs.push({distanceToPlankCenter, weight}); // save to localstorage (save to state)
 
     fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distanceToPlankCenter, weight, randomColor);
     
@@ -66,20 +66,12 @@ export function resetStateHandler() {
     resetLogs()
 }
 
-export const pauseBtn = document.getElementById('pause');
+
 
 export function pauseHandler() {
     setPause(!isPaused)
     console.log("paused")
-    if (isPaused) {
-        // Pause
-        pauseBtn.textContent = "CONTINUE";
-        pauseBtn.classList.add("continue"); 
-    } else {
-        // Continue
-        pauseBtn.textContent = "PAUSE";
-        pauseBtn.classList.remove("continue"); 
-    }
+    setPauseDom(isPaused)
 }
 
 
