@@ -8,9 +8,9 @@ svg.appendChild(ghostGroup);
 
 
 // Create Circle Function
-export function createCompleteCircle(circleCx,circleCy,radius,color, weight, strokeColor="rgba(0,0,0,0.2)",strokeWidth=1) {
-    const wholeCircle = createCircle(circleCx,circleCy,radius,color,strokeColor,strokeWidth)
-    const shine = createShine(radius, circleCx)
+export function createCompleteCircle(circleCx, circleCy, radius, color, weight, strokeColor = "rgba(0,0,0,0.2)", strokeWidth=1) {
+    const wholeCircle = createCircle(circleCx, circleCy, radius, color, strokeColor, strokeWidth)
+    const shine = createShine(radius, circleCx, circleCy)
     const label = createCircleText(circleCx,circleCy, weight)
     const fallingGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
     // Added to "g" seesawGroup for moving together (same position)
@@ -36,9 +36,10 @@ function createCircle(centerX,centerY,radius,color,strokeColor,strokeWidth) {
     return circle;
 }
 
-function createShine(radius, circleCx){
+function createShine(radius, circleCx, circleCy){
     let shineRadius = radius * 0.2;
-    let shineCy =  (PLANK_Y-10 - radius - 1) - (radius * 0.4);
+    // let shineCy =  (PLANK_Y - radius) - (radius * 0.4);
+    let shineCy =  (circleCy - (radius * 0.4));
     let shineCx = circleCx - (radius * 0.4)
 
 
@@ -90,26 +91,30 @@ function createDashedDistanceLine(x1, x2, y) {
     return line;
 }
 
-export function setBallY(cy, radius, wholeCircle, shine, label) {
+export function setBallY(cy, radius, wholeCircle, shine, label) { // prm: fallingGroup
+    //fallingGroup.setAttribute("transform", `translate(0, ${cy - GHOST_CY})`)
     wholeCircle.setAttribute("cy", cy)
     shine.setAttribute("cy", cy - (radius * 0.4))
     label.setAttribute("y", cy + 5)
 }
 
-export function setBallX(cx, radius, wholeCircle, shine, label) {
+export function setBallX(cx, radius, wholeCircle, shine, label) {// prm: fallingGroup
+    //fallingGroup.setAttribute("transform", `translate( ${ mouseX + cx},0)`)
+    
     wholeCircle.setAttribute("cx", cx);
     shine.setAttribute("cx", cx - (radius * 0.4));
     label.setAttribute("x", cx);
+    
 }
 
 
 // GHOST CIRCLE SECTION
-export function updateGhost(x, weight) {
+export function updateGhost(x, weight) {  
     ghostGroup.innerHTML = ''; 
     const radius = 10 + (weight * 2);
     const distanceToPlankCenter = x - PLANK_CENTER;
-    const circle = createCircle(x, GHOST_CY, radius, "gray")
-    const text = createCircleText(x, GHOST_CY, weight, "black")
+    const circle = createCircle(x, GHOST_CY, radius, "gray")   
+    const text = createCircleText(x, GHOST_CY, weight, "black")  
     const distanceText = createDistanceText(distanceToPlankCenter.toFixed(0), x, GHOST_CY, radius, "grey");
     const dashedLine = createDashedDistanceLine( PLANK_CENTER, x, GHOST_CY);
     
@@ -122,9 +127,7 @@ export function updateGhost(x, weight) {
 
 export function uploadBalls(placedBalls) {
     placedBalls.map(ball => {
-            const  {wholeCircle, shine, label, fallingGroup} = createCompleteCircle(ball.localCX,ball.localCY, ball.radius, ball.color, ball.weight) 
-            setBallY( ball.localCY, ball.radius, wholeCircle, shine, label);
-            setBallX( ball.localCX, ball.radius, wholeCircle, shine, label);
+            const  {wholeCircle, shine, label, fallingGroup} = createCompleteCircle(ball.localCX, ball.localCY, ball.radius, ball.color, ball.weight) 
             seesawGroup.appendChild(fallingGroup);       
         }
     ) 

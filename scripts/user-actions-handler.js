@@ -10,7 +10,7 @@ export function mouseMoveHandler(event) { // instead of mousemove on plank I cha
     // If we are only in between PLANKSTART-PLANKEND
     if (mouseX >= PLANKSTART-1 && mouseX <= PLANKEND) {
     // Update the ghost circle (X coordinate is the same as the mouse cursor, weight is the next weight)
-        updateGhost(mouseX, measures.nextWeight);
+        updateGhost(mouseX, measures.nextWeight);  
     } else {
         ghostGroup.style.display = "none";
     }
@@ -38,11 +38,11 @@ export function plankClickHandler(event) {
     addNewLog(distanceToPlankCenter, weight);  // write to frontend
     logs.push({distanceToPlankCenter, weight}); // save to localstorage (save to state)
 
-    fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distanceToPlankCenter, weight, randomColor);
+    fallingAnimation(wholeCircle, shine, label, targetY, fallingGroup, radius, distanceToPlankCenter, weight, randomColor); 
     
    // After the circle is created determine the next weight and update the ghost.
     measures.nextWeight = getRandomWeight();
-    updateGhost(mouseX, measures.nextWeight);
+    updateGhost(mouseX, measures.nextWeight);  
     
 }
 

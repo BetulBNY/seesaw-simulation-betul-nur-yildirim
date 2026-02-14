@@ -21,14 +21,14 @@ function calcuateAngle(torqueDiff) {
 function updateTorque(){
     // Calculating Torque
     const lastBall = placedBalls[placedBalls.length - 1]; // instead of looping through all the list, we are updating the last element
-    if (lastBall.distance < 0) {
+    if (lastBall.distanceToPlankCenter < 0) {
         // Left Side
         measures.weights.left += lastBall.weight;
-        measures.torques.left += lastBall.weight * Math.abs(lastBall.distance);
+        measures.torques.left += lastBall.weight * Math.abs(lastBall.distanceToPlankCenter);
     } else {
         // Right Side
         measures.weights.right += lastBall.weight;
-        measures.torques.right += lastBall.weight * Math.abs(lastBall.distance);
+        measures.torques.right += lastBall.weight * Math.abs(lastBall.distanceToPlankCenter);
     }
 
     return (measures.torques.right - measures.torques.left) / 30;   
