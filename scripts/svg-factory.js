@@ -17,7 +17,7 @@ export function createCompleteCircle(circleCx, circleCy, radius, color, weight, 
     fallingGroup.appendChild(wholeCircle);
     fallingGroup.appendChild(shine);
     fallingGroup.appendChild(label);
-
+    fallingGroup.setAttribute("radius", radius);  //inx
     // Adding all of them to the svg group not seesaw group (separate group for each ball)
     svg.appendChild(fallingGroup);
     return { wholeCircle, shine, label, fallingGroup} ;

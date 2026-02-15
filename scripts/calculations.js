@@ -8,8 +8,8 @@ export function getPlankY(distance) {
     return PLANK_Y + (distance * Math.tan(angleRad));                 
 }
 
-export function updatePlankState(){
-    let torqueDiff = updateTorque();        
+export function updatePlankState(lastUpdatedBall){
+    let torqueDiff = updateTorque(lastUpdatedBall);        
     measures.currentAngle = calcuateAngle(torqueDiff);
     rotatePlank();
 }
@@ -18,17 +18,18 @@ function calcuateAngle(torqueDiff) {
     return Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff));
 }
 
-function updateTorque(){
+function updateTorque(lastUpdatedBall){
     // Calculating Torque
-    const lastBall = placedBalls[placedBalls.length - 1]; // instead of looping through all the list, we are updating the last element
-    if (lastBall.distanceToPlankCenter < 0) {
+    //const lastBall = placedBalls[placedBalls.length - 1]; // instead of looping through all the list, we are updating the last element
+    lastUpdatedBall.lastTorque = lastUpdatedBall.weight * lastUpdatedBall.distanceToPlankCenter;   // 
+    if (lastUpdatedBall.lastTorque < 0) {
         // Left Side
-        measures.weights.left += lastBall.weight;
-        measures.torques.left += lastBall.weight * Math.abs(lastBall.distanceToPlankCenter);
+        measures.weights.left += lastUpdatedBall.weight;
+        measures.torques.left += Math.abs(lastUpdatedBall.lastTorque);
     } else {
         // Right Side
-        measures.weights.right += lastBall.weight;
-        measures.torques.right += lastBall.weight * Math.abs(lastBall.distanceToPlankCenter);
+        measures.weights.right += lastUpdatedBall.weight;
+        measures.torques.right += Math.abs(lastUpdatedBall.lastTorque);
     }
 
     return (measures.torques.right - measures.torques.left) / 30;   

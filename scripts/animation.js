@@ -35,7 +35,7 @@ export function fallingAnimation(wholeCircle, shine, label, targetY, fallingGrou
 
             seesawGroup.appendChild(fallingGroup);  // appending to seesaw group
             
-            updatePlankState();
+            updatePlankState(placedBalls[placedBalls.length - 1]);  // we gave last fallen ball
             playLandingSound(weight)
             updatePanelsDOM();
         }
